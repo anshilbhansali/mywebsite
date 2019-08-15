@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Article page</title>
+
+    <link href="../static/article_css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/article_css/style.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <div class="container-fluid" style="background-image: linear-gradient(pink, white);">
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="text-center">
+				<br></br>
+				{{heading}}
+				<br></br>
+			</h3>
+			<div class="row">
+				<div class="col-md-6">
+					<p>
+						{{content}}
+					</p>
+				</div>
+				<div class="col-md-6">
+					<img alt="Article Image" class="rounded-circle" src="https://www.layoutit.com/img/sports-q-c-140-140-3.jpg"
+					style="display: block; margin:auto; width: 250px">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+    <script src="../static/article_js/jquery.min.js"></script>
+    <script src="../static/article_js/bootstrap.min.js"></script>
+    <script src="../static/article_js/scripts.js"></script>
+  </body>
+</html>
