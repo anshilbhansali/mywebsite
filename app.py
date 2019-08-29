@@ -19,31 +19,50 @@ articles = {
 # PAGES 
 @app.route('/')
 def home():
-	return render_template('index.html', articles=articles)
+	category = "home"
+	title = " ".join(el.capitalize() for el in category.split('_'))
+	return render_template('index.html', articles=articles, category=category, title=title)
 
 @app.route('/index')
 def index():
-	return render_template('index.html', articles=articles)
+	category = "home"
+	title = " ".join(el.capitalize() for el in category.split('_'))
+	return render_template('index.html', articles=articles, category=category, title=title)
 
 @app.route('/technology')
 def technology():
-	return render_template('technology.html', articles=articles)
+	category = "technology"
+	title = " ".join(el.capitalize() for el in category.split('_'))
+	return render_template('articles.html', articles=articles, category=category, title=title)
 
 @app.route('/current_markets')
 def current_markets():
-	return render_template('current_markets.html', articles=articles)
+	category = "current_markets"
+	title = " ".join(el.capitalize() for el in category.split('_'))
+	return render_template('articles.html', articles=articles, category=category, title=title)
 
 @app.route('/personal_finance')
 def personal_finance():
-	return render_template('personal_finance.html', articles=articles)
+	category = "personal_finance"
+	title = " ".join(el.capitalize() for el in category.split('_'))
+	return render_template('articles.html', articles=articles, category=category, title=title)
 
 @app.route('/about')
 def about():
-	return render_template('about.html', articles=articles)
+	category = "about"
+	title = " ".join(el.capitalize() for el in category.split('_'))
+	return render_template('about.html', articles=articles, category=category, title=title)
 
 @app.route('/contact')
 def contact():
-	return render_template('contact.html', articles=articles)
+	category = "contact"
+	title = " ".join(el.capitalize() for el in category.split('_'))
+	return render_template('contact.html', articles=articles, category=category, title=title)
+
+@app.route('/sections/<current_section>')
+def sections(current_section):
+	print "YO: ", current_section
+	return render_template('sections.html', articles=articles, category=current_section)
 
 @app.route('/article/<id>')
 def article(id):
