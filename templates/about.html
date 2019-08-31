@@ -30,12 +30,7 @@
 			<h1 id="colorlib-logo"><a href="index">Anshil<span>.</span></a></h1>
 			<nav id="colorlib-main-menu" role="navigation">
 				<ul>
-          <li><a href="index">Home</a></li>
-          <li><a href="technology">Technology</a></li>
-          <li><a href="current_markets">Current Markets</a></li>
-          <li><a href="personal_finance">Personal Finance</a></li>
-          <li class="colorlib-active"><a href="about">About</a></li>
-          <li><a href="contact">Contact</a></li>
+          <div id="sections"></div>
         </ul>
 			</nav>
 
@@ -59,7 +54,7 @@
 						<div class="desc">
 							<h2 class="subheading">Hello I'm</h2>
               <h1 class="mb-4">Anshil Bhansali</h1>
-              <p class="mb-4">I am a Software Engineer with 2+ years of experience. Armed with a Bachelor's from University of Illionis Urbana Champaign, I worked at a GovTech startup in Chicago called Quicket Solutions for a year, then moved to Vettery as a full stack engineer. I transitioned into a Data Engineering role after a couple of months, and currently happy with it. </p>
+              <p class="mb-4">I am a Software Engineer with 2+ years of experience. Armed with a Bachelor's from University of Illionis Urbana Champaign, I worked at a GovTech startup in Chicago called Quicket Solutions for a year, then moved to Vettery as a full stack engineer. I shifted my focus solely towards the backend architecture after a couple of months, and currently happy with it. </p>
               <p>A little bit about me - I LOVE to play ping pong, and always up for a challenge. I enjoy breaking a sweat playing basketball and occasionally working out; I tend to get lazy sometimes. I started this website as I wanted to encourage young folks like me to be more aware of their financial decisions as they enter the real world and start making money. One thing I spend a lot of time in my free time for the past 2 years is reading about high growth tech companies, and try to understand why they are successful and growing so fast. This helps me in my investing strategies. I am fairly proud of the money I am saving and investing, and have generated some decent returns(60% in 2 years!). I hope you'll enjoy my content here, and I'd appreciate any sort of feedback!</p>
 							<ul class="ftco-social mt-3">
                 <li class="ftco-animate"><a href="https://github.com/anshilbhansali/"><span class="icon-github"></span></a></li>
@@ -94,6 +89,11 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="static/js/google-map.js"></script>
   <script src="static/js/main.js"></script>
+  <script> 
+    $(function(){
+      $("#sections").load("../sections/"+"{{category}}"); 
+    });
+  </script>
     
   </body>
 </html>

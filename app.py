@@ -1,85 +1,100 @@
 from flask import Flask
 from flask import render_template
+import random
+import json
 
 app = Flask(__name__)
 
-articles = {
-		1: "How I saved $100k at the age of 24",
-		2: "Why I am bullish about Slack",
-		3: "My biggest bet - Elasticsearch",
-		4: "How I made a 60% return in 2 years",
-		5: "Evolution of Operating Systems",
-		6: "Uber IPO",
-		7: "Analyzing a SAAS company",
-		8: "Working in Chicago vs New York city",
-		9: "My take on personal finance",
-		10: "What the hell is the yield curve?"
-	}
+# dummy data
+'''
+{
+	<article_id>: {
+		'content': [list of str/paragraphs],
+		'title': str,
+		'subtitle': str,
+		'id': int
+	},
+}
+'''
+
+def get_data():
+	articles, articles_by_category = None, None
+	with open('fake_data.json') as fake_data:
+		articles = json.load(fake_data)
+		articles_by_category = {
+			'technology': [articles[str(i)] for i in range(1, 8)],
+			'current_markets': [articles[str(i)] for i in range(8, 15)],
+			'personal_finance': [articles[str(i)] for i in range(15, 21)]
+		}
+	return articles, articles_by_category
+
+def titalize(category):
+	''' splits str by _ and then capitalizes each one
+	'''
+	return " ".join(el.capitalize() for el in category.split('_'))
 
 # PAGES 
-@app.route('/')
-def home():
-	category = "home"
-	title = " ".join(el.capitalize() for el in category.split('_'))
-	return render_template('index.html', articles=articles, category=category, title=title)
 
+@app.route('/')
 @app.route('/index')
 def index():
+	articles, articles_by_category = get_data()
+
 	category = "home"
-	title = " ".join(el.capitalize() for el in category.split('_'))
-	return render_template('index.html', articles=articles, category=category, title=title)
+	title = titalize(category)
 
-@app.route('/technology')
-def technology():
-	category = "technology"
-	title = " ".join(el.capitalize() for el in category.split('_'))
-	return render_template('articles.html', articles=articles, category=category, title=title)
+	all_articles = []
+	for article_id in articles:
+		if int(article_id) in range(1,8):
+			articles[article_id]['category'] = "Technology"
+		elif int(article_id) in range(8, 15):
+			articles[article_id]['category'] = "Current Markets"
+		elif int(article_id) in range(15, 21):
+			articles[article_id]['category'] = "Personal Finance"
 
-@app.route('/current_markets')
-def current_markets():
-	category = "current_markets"
-	title = " ".join(el.capitalize() for el in category.split('_'))
-	return render_template('articles.html', articles=articles, category=category, title=title)
 
-@app.route('/personal_finance')
-def personal_finance():
-	category = "personal_finance"
-	title = " ".join(el.capitalize() for el in category.split('_'))
-	return render_template('articles.html', articles=articles, category=category, title=title)
+		all_articles.append(articles[article_id])
+
+	random.shuffle(all_articles)
+	return render_template('index.html', articles=all_articles, category=category, title=title)
+
+@app.route('/articles/<category>')
+def articles(category):
+	articles, articles_by_category = get_data()
+	if category not in articles_by_category.keys():
+		raise Exception('Must be a vaild category: {}'.format(category))
+
+	title = titalize(category)
+	articles=articles_by_category[category]
+
+	first = random.choice([i for i in range(len(articles))])
+	second = random.choice([i for i in range(len(articles)) if i!=first])
+	new_articles = [first, second]
+	print new_articles
+	return render_template('articles.html', articles=articles, category=category, title=title, new_articles=new_articles)
 
 @app.route('/about')
 def about():
 	category = "about"
-	title = " ".join(el.capitalize() for el in category.split('_'))
+	title = titalize(category)
 	return render_template('about.html', articles=articles, category=category, title=title)
 
 @app.route('/contact')
 def contact():
 	category = "contact"
-	title = " ".join(el.capitalize() for el in category.split('_'))
+	title = titalize(category)
 	return render_template('contact.html', articles=articles, category=category, title=title)
 
 @app.route('/sections/<current_section>')
 def sections(current_section):
-	print "YO: ", current_section
 	return render_template('sections.html', articles=articles, category=current_section)
 
 @app.route('/article/<id>')
 def article(id):
 	id = int(id)
-	heading = "Some article heading"
-	content = '''
-	BLahBlahBlah BLahBlahBlah BLahBlahBlah BLahBlahBlah
-	BLahBlahBlah BLahBlahBlah BLahBlahBlah BLahBlahBlah
-	BLahBlahBlah BLahBlahBlah BLahBlahBlah BLahBlahBlah
-	BLahBlahBlah BLahBlahBlah BLahBlahBlah BLahBlahBlah
-	BLahBlahBlah BLahBlahBlah BLahBlahBlah BLahBlahBlah
-	BLahBlahBlah BLahBlahBlah BLahBlahBlah BLahBlahBlah
-	BLahBlahBlah BLahBlahBlah BLahBlahBlah BLahBlahBlah
-	BLahBlahBlah BLahBlahBlah BLahBlahBlah BLahBlahBlah
-	BLahBlahBlah BLahBlahBlah BLahBlahBlah BLahBlahBlah
-	'''
-	return render_template('article.html', heading=articles[id], content=content, id=id)
+	title = articles[id]['title']
+	content = articles[id]['content']
+	return render_template('article.html', heading=title, content=content, id=id)
 
 if __name__ == '__main__':
 	app.run(debug=True)

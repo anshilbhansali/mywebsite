@@ -2,36 +2,36 @@
 	{% if category=="home" %}
 		<li class="colorlib-active"><a href="index">Home</a></li>
 	{% else %}
-		<li><a href="index">Home</a></li>
+		<li><a href="{{ url_for('index') }}">Home</a></li>
 	{% endif %}
 
 	{% if category=="technology" %}
 		<li class="colorlib-active"><a href="technology">Technology</a></li>
 	{% else %}
-		<li><a href="technology">Technology</a></li>
+		<li><a href="/articles/technology">Technology</a></li>
 	{% endif %}
 
 	{% if category=="current_markets" %}
 		<li class="colorlib-active"><a href="current_markets">Current Markets</a></li>
 	{% else %}
-		<li><a href="current_markets">Current Markets</a></li>
+		<li><a href="/articles/current_markets">Current Markets</a></li>
 	{% endif %}
 
 	{% if category=="personal_finance" %}
 		<li class="colorlib-active"><a href="personal_finance">Personal Finance</a></li>
 	{% else %}
-		<li><a href="personal_finance">Personal Finance</a></li>
+		<li><a href="/articles/personal_finance">Personal Finance</a></li>
 	{% endif %}
 
 	{% if category=="about" %}
 		<li class="colorlib-active"><a href="about">About</a></li>
 	{% else %}
-		<li><a href="about">About</a></li>
+		<li><a href="{{ url_for('about') }}">About</a></li>
 	{% endif %}
 
 	{% if category=="contact" %}
 		<li class="colorlib-active"><a href="contact">Contact</a></li>
 	{% else %}
-		<li><a href="contact">Contact</a></li>
+		<li><a href="{{ url_for('contact') }}">Contact</a></li>
 	{% endif %}
 </ul>

@@ -35,12 +35,7 @@
 			<h1 id="colorlib-logo"><a href="index">Anshil<span>.</span></a></h1>
 			<nav id="colorlib-main-menu" role="navigation">
 				<ul>
-					<li class="colorlib-active"><a href="index">Home</a></li>
-					<li><a href="technology">Technology</a></li>
-					<li><a href="current_markets">Current Markets</a></li>
-					<li><a href="personal_finance">Personal Finance</a></li>
-					<li><a href="about">About</a></li>
-					<li><a href="contact">Contact</a></li>
+					<div id="sections"></div>
 				</ul>
 			</nav>
 
@@ -64,7 +59,7 @@
 						<div class="desc">
 							<h2 class="subheading">Hello I'm</h2>
 							<h1 class="mb-4">Anshil Bhansali</h1>
-							<p class="mb-4">I am a Software Engineer with 2+ years of experience. Armed with a Bachelor's from University of Illionis Urbana Champaign, I worked at a GovTech startup in Chicago called Quicket Solutions for a year, then moved to Vettery as a full stack engineer. I transitioned into a Data Engineering role after a couple of months, and currently happy with it. </p>
+							<p class="mb-4">I am a Software Engineer with 2+ years of experience. Armed with a Bachelor's from University of Illionis Urbana Champaign, I worked at a GovTech startup in Chicago called Quicket Solutions for a year, then moved to Vettery as a full stack engineer. I shifted my focus solely towards the backend architecture after a couple of months, and currently happy with it. </p>
 							<p><a href="about" class="btn-custom">More About Me <span class="ion-ios-arrow-forward"></span></a></p>
 						</div>
 					</div>
@@ -73,360 +68,44 @@
 			<section class="ftco-section">
     	<div class="container">
     		<div class="row justify-content-center mb-5 pb-2">
-          <div class="col-md-7 heading-section text-center ftco-animate">
-            <h2 class="mb-4">Articles</h2>
-            <p>A mix of technology, latest high growth companies, current market news, and tips on personal finance. </p>
-          </div>
-        </div>
+	          <div class="col-md-7 heading-section text-center ftco-animate">
+	            <h2 class="mb-4">Articles</h2>
+	            <p>A mix of technology, latest high growth companies, current market news, and tips on personal finance. </p>
+	          </div>
+        	</div>
+
     		<div class="row">
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_1.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Technology</a></span>
-	              <h3 class="mb-4"><a href="#">The Newest Technology On This Year 2019</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_2.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
+    			{% for article in articles %}
+	    			<div class="col-md-4">
+	    				<div class="blog-entry ftco-animate">
+								<a href="#" class="img img-2" style="background-image: url(static/images/image_{{article['id']%12+1}}.jpg);"></a>
+								<div class="text text-2 pt-2 mt-3">
+									<span class="category mb-3 d-block"><a href="#">{{article['category']}}</a></span>
+		              				<h3 class="mb-4"><a href="#">{{article['title']}}</a></h3>
+		              				<p class="mb-4">{{article['subtitle']}}</p>
+					              	<div class="author mb-4 d-flex align-items-center">
+					            		<a href="#" class="img" style="background-image: url(static/images/person_{{article['id']%4+1}}.jpg);"></a>
+					            		<div class="ml-3 info">
+					            			<span>Written by</span>
+					            			<h3><a href="#">Anshil Bhansali</a>, <span>Nov. 28, 2018</span></h3>
+					            		</div>
+					            	</div>
+					              	<div class="meta-wrap align-items-center">
+						              	<div class="half order-md-last">
+							              	<p class="meta">
+							              		<span><i class="icon-heart"></i>3</span>
+							              		<span><i class="icon-eye"></i>100</span>
+							              		<span><i class="icon-comment"></i>5</span>
+							              	</p>
+						              	</div>
+						              	<div class="half">
+							              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
+						              	</div>
+						             </div>
+		            			</div>
 						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_2.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Travel</a></span>
-	              <h3 class="mb-4"><a href="#">What to pack when visiting Sea</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_1.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_3.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Fashion</a></span>
-	              <h3 class="mb-4"><a href="#">Awesome Fashion Trend in For Summer</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_3.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_4.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Travel</a></span>
-	              <h3 class="mb-4"><a href="#">10 Most Awesome Place</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_1.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_5.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Travel</a></span>
-	              <h3 class="mb-4"><a href="#">10 Most Awesome Beach in Asia</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_2.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_6.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Travel</a></span>
-	              <h3 class="mb-4"><a href="#">Top Amazing Places to Go in Summer</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_3.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_7.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Fashion</a></span>
-	              <h3 class="mb-4"><a href="#">7 Beginner Photographer’s Mistakes</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_1.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_8.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Photography</a>, <a href="#">Travel</a></span>
-	              <h3 class="mb-4"><a href="#">Excited to Visit in Palawan Philippines</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_2.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_9.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Technology</a></span>
-	              <h3 class="mb-4"><a href="#">How to Make a Paper Boat in Scratch</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_3.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_10.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Fashion</a></span>
-	              <h3 class="mb-4"><a href="#">10 Best Way to Styling Your Lifestyle</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_1.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_11.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Fashion</a></span>
-	              <h3 class="mb-4"><a href="#">10 Tips to Become a Fashion Pro</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_2.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
-    			<div class="col-md-4">
-    				<div class="blog-entry ftco-animate">
-							<a href="#" class="img img-2" style="background-image: url(static/images/image_12.jpg);"></a>
-							<div class="text text-2 pt-2 mt-3">
-								<span class="category mb-3 d-block"><a href="#">Photography</a></span>
-	              <h3 class="mb-4"><a href="#">Visit the Most Amazing Place in North America</a></h3>
-	              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost</p>
-	              <div class="author mb-4 d-flex align-items-center">
-	            		<a href="#" class="img" style="background-image: url(static/images/person_3.jpg);"></a>
-	            		<div class="ml-3 info">
-	            			<span>Written by</span>
-	            			<h3><a href="#">Dave Lewis</a>, <span>Nov. 28, 2018</span></h3>
-	            		</div>
-	            	</div>
-	              <div class="meta-wrap align-items-center">
-	              	<div class="half order-md-last">
-		              	<p class="meta">
-		              		<span><i class="icon-heart"></i>3</span>
-		              		<span><i class="icon-eye"></i>100</span>
-		              		<span><i class="icon-comment"></i>5</span>
-		              	</p>
-	              	</div>
-	              	<div class="half">
-		              	<p><a href="#" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
-	              	</div>
-	              </div>
-	            </div>
-						</div>
-    			</div>
+	    			</div>
+	    		{% endfor %}
     		</div>
     	</div>
     </section>
@@ -503,6 +182,11 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="static/js/google-map.js"></script>
   <script src="static/js/main.js"></script>
+  <script> 
+    $(function(){
+    	$("#sections").load("../sections/"+"{{category}}"); 
+    });
+  </script>
     
   </body>
 </html>
