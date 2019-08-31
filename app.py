@@ -91,6 +91,7 @@ def sections(current_section):
 
 @app.route('/article/<id>')
 def article(id):
+	return "Work in progress..."
 	id = int(id)
 	title = articles[id]['title']
 	content = articles[id]['content']
