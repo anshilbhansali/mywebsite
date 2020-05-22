@@ -31,9 +31,7 @@
 				</ul>
 			</nav>
 
-			<div class="colorlib-footer">
-				<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-			  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+			<div class="colorlib-footer" style="font-size: 30px">
 				<ul>
 		          <li><a href="https://www.facebook.com/anshil.bhansali" target="_blank"><i class="icon-facebook"></i></a></li>
 		          <li><a href="https://twitter.com/anshilbhansali" target="_blank"><i class="icon-twitter"></i></a></li>
@@ -70,12 +68,16 @@
 		        <div class="container-fluid">
 		          <div class="row no-gutters slider-text slider-text-2 js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
 		          <div class="col-md-10 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-		            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-		            	{{ articles[new_articles[1]]['title'] }}
-		            </h1>
-		            <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-		            	{{ articles[new_articles[1]]['subtitle'] }}
-		            </p>
+		            <a href="/article/{{articles[new_articles[1]]['id']}}">
+			            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+			            	{{ articles[new_articles[1]]['title'] }}
+			            </h1>
+		        	</a>
+		        	<a href="/article/{{articles[new_articles[1]]['id']}}">
+			            <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+			            	{{ articles[new_articles[1]]['subtitle'] }}
+			            </p>
+		        	</a>
 		          </div>
 		        </div>
 		        </div>
@@ -102,13 +104,15 @@
 					            		</div>
 					            	</div>
 					              <div class="meta-wrap d-md-flex align-items-center">
-					              	<div class="half order-md-last text-md-right">
+
+					              	<div class="half order-md-last text-md-right" style="visibility: hidden;">
 						              	<p class="meta">
 						              		<span><i class="icon-heart"></i>3</span>
 						              		<span><i class="icon-eye"></i>100</span>
 						              		<span><i class="icon-comment"></i>5</span>
 						              	</p>
 					              	</div>
+
 					              	<div class="half">
 						              	<p><a href="/article/{{article['id']}}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
 					              	</div>

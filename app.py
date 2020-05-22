@@ -64,7 +64,7 @@ def articles(category):
 
 	articles, articles_by_category = get_data()
 	if category not in articles_by_category.keys():
-		raise Exception('Must be a vaild category: {}'.format(category))
+		raise Exception('Must be a valid category: {}'.format(category))
 
 	title = titalize(category)
 	articles=articles_by_category[category]
