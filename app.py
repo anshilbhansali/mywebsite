@@ -60,6 +60,8 @@ def index():
 
 @app.route('/articles/<category>')
 def articles(category):
+	category = category.lower().replace(" ", "_")
+
 	articles, articles_by_category = get_data()
 	if category not in articles_by_category.keys():
 		raise Exception('Must be a vaild category: {}'.format(category))
@@ -70,7 +72,6 @@ def articles(category):
 	first = random.choice([i for i in range(len(articles))])
 	second = random.choice([i for i in range(len(articles)) if i!=first])
 	new_articles = [first, second]
-	print new_articles
 	return render_template('articles.html', articles=articles, category=category, title=title, new_articles=new_articles)
 
 @app.route('/about')
@@ -91,11 +92,16 @@ def sections(current_section):
 
 @app.route('/article/<id>')
 def article(id):
-	return "Work in progress..."
-	id = int(id)
+	articles, articles_by_category = get_data()
 	title = articles[id]['title']
 	content = articles[id]['content']
-	return render_template('article.html', heading=title, content=content, id=id)
+	subtitle = articles[id]['subtitle']
+
+	if int(id) in range(1,8): category = "technology"
+	elif int(id) in range(8, 15): category = "current_markets"
+	elif int(id) in range(15, 21): category = "personal_finance"
+
+	return render_template('article.html', title=title, content=content, id=id, category=category, subtitle=subtitle)
 
 if __name__ == '__main__':
 	app.run(debug=True)

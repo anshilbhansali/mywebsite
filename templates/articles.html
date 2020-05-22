@@ -35,11 +35,12 @@
 				<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 			  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
 				<ul>
-					<li><a href="#"><i class="icon-facebook"></i></a></li>
-					<li><a href="#"><i class="icon-twitter"></i></a></li>
-					<li><a href="#"><i class="icon-instagram"></i></a></li>
-					<li><a href="#"><i class="icon-linkedin"></i></a></li>
-				</ul>
+		          <li><a href="https://www.facebook.com/anshil.bhansali" target="_blank"><i class="icon-facebook"></i></a></li>
+		          <li><a href="https://twitter.com/anshilbhansali" target="_blank"><i class="icon-twitter"></i></a></li>
+		          <li><a href="https://www.instagram.com/anshilb/" target="_blank"><i class="icon-instagram"></i></a></li>
+		          <li><a href="https://www.linkedin.com/in/anshilbhansali" target="_blank"><i class="icon-linkedin"></i></a></li>
+		          <li><a href="https://github.com/anshilbhansali/" target="_blank"><i class="icon-github"></i></a></li>
+		        </ul>
 			</div>
 		</aside> <!-- END COLORLIB-ASIDE -->
 		<div id="colorlib-main">
@@ -49,12 +50,16 @@
 		        <div class="container-fluid">
 		          <div class="row no-gutters slider-text slider-text-2 js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
 		          <div class="col-md-10 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-		            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-		            	{{ articles[new_articles[0]]['title'] }}
-		            </h1>
-		            <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-		            	{{ articles[new_articles[0]]['subtitle'] }}
-		            </p>
+		          	<a href="/article/{{articles[new_articles[0]]['id']}}">
+			            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+			            	{{ articles[new_articles[0]]['title'] }}
+			            </h1>
+		        	</a>
+		        	<a href="/article/{{articles[new_articles[0]]['id']}}">
+			            <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+			            	{{ articles[new_articles[0]]['subtitle'] }}
+			            </p>
+		            </a>
 		          </div>
 		        </div>
 		        </div>
@@ -84,16 +89,16 @@
 	    					{% for article in articles %}
 	    						<div class="col-md-12">
 		    						<div class="blog-entry ftco-animate">
-		    							<a href="#" class="img" style="background-image: url(../static/images/image_{{article['id']%12+1}}.jpg);"></a>
+		    							<a href="/article/{{article['id']}}" class="img" style="background-image: url(../static/images/image_{{article['id']%12+1}}.jpg);"></a>
 		    							<div class="text pt-2 mt-3">
 						          	<span class="category mb-1 d-block"><a href="#">{{title}}</a></span>
-					              <h3 class="mb-4"><a href="#">{{article['title']}}</a></h3>
+					              <h3 class="mb-4"><a href="/article/{{article['id']}}">{{article['title']}}</a></h3>
 					              <p class="mb-4">{{article['content'][0]}}</p>
 					              <div class="author mb-4 d-flex align-items-center">
-					            		<a href="#" class="img" style="background-image: url(../static/images/person_1.jpg);"></a>
+					            		<a href="{{ url_for('about') }}" class="img" style="background-image: url(../static/images/person_1.jpg);"></a>
 					            		<div class="ml-3 info">
 					            			<span>Written by</span>
-					            			<h3><a href="#">Anshil Bhansali</a>, <span>Nov 28, 2018</span></h3>
+					            			<h3><a href="{{ url_for('about') }}">Anshil Bhansali</a>, <span>Nov 28, 2018</span></h3>
 					            		</div>
 					            	</div>
 					              <div class="meta-wrap d-md-flex align-items-center">
@@ -105,7 +110,7 @@
 						              	</p>
 					              	</div>
 					              	<div class="half">
-						              	<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
+						              	<p><a href="/article/{{article['id']}}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
 					              	</div>
 					              </div>
 					            </div>
@@ -202,17 +207,6 @@
 	              </form>
 	            </div>
 
-	            <div class="sidebar-box ftco-animate">
-	            	<h3 class="sidebar-heading">Archives</h3>
-	              <ul class="categories">
-	              	<li><a href="#">October 2018 <span>(10)</span></a></li>
-	                <li><a href="#">September 2018 <span>(6)</span></a></li>
-	                <li><a href="#">August 2018 <span>(8)</span></a></li>
-	                <li><a href="#">July 2018 <span>(2)</span></a></li>
-	                <li><a href="#">June 2018 <span>(7)</span></a></li>
-	                <li><a href="#">May 2018 <span>(5)</span></a></li>
-	              </ul>
-	            </div>
 				<!-- END COL -->
 	    		</div>
 	    	</div>
@@ -227,18 +221,6 @@
 	                <li><a href="/articles/technology">Technology <span>(6)</span></a></li>
 	                <li><a href="/articles/current_markets">Current Markets <span>(8)</span></a></li>
 	                <li><a href="/articles/personal_finance">Personal Finance <span>(2)</span></a></li>
-	              </ul>
-	            </div>
-	          </div>
-	          <div class="col-md">
-	             <div class="ftco-footer-widget mb-4">
-	              <h2 class="ftco-heading-2">Archives</h2>
-	              <ul class="list-unstyled categories">
-	              	<li><a href="#">October 2018 <span>(6)</span></a></li>
-	                <li><a href="#">September 2018 <span>(6)</span></a></li>
-	                <li><a href="#">August 2018 <span>(8)</span></a></li>
-	                <li><a href="#">July 2018 <span>(2)</span></a></li>
-	                <li><a href="#">June 2018 <span>(7)</span></a></li>
 	              </ul>
 	            </div>
 	          </div>

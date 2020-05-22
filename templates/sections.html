@@ -28,10 +28,4 @@
 	{% else %}
 		<li><a href="{{ url_for('about') }}">About</a></li>
 	{% endif %}
-
-	{% if category=="contact" %}
-		<li class="colorlib-active"><a href="contact">Contact</a></li>
-	{% else %}
-		<li><a href="{{ url_for('contact') }}">Contact</a></li>
-	{% endif %}
 </ul>
