@@ -48,12 +48,12 @@
 		        <div class="container-fluid">
 		          <div class="row no-gutters slider-text slider-text-2 js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
 		          <div class="col-md-10 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-		          	<a href="/article/{{new_articles[0]['id']}}">
+		          	<a href="/article/{{new_articles[0]['category']}}/{{new_articles[0]['created']}}">
 			            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
 			            	{{ new_articles[0]['title'] }}
 			            </h1>
 		        	</a>
-		        	<a href="/article/{{new_articles[0]['id']}}">
+		        	<a href="/article/{{new_articles[0]['category']}}/{{new_articles[0]['created']}}">
 			            <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
 			            	{{ new_articles[0]['subtitle'] }}
 			            </p>
@@ -68,12 +68,12 @@
 		        <div class="container-fluid">
 		          <div class="row no-gutters slider-text slider-text-2 js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
 		          <div class="col-md-10 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-		            <a href="/article/{{new_articles[1]['id']}}">
+		            <a href="/article/{{new_articles[1]['category']}}/{{new_articles[1]['created']}}">
 			            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
 			            	{{ new_articles[1]['title'] }}
 			            </h1>
 		        	</a>
-		        	<a href="/article/{{new_articles[1]['id']}}">
+		        	<a href="/article/{{new_articles[1]['category']}}/{{new_articles[1]['created']}}">
 			            <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
 			            	{{ new_articles[1]['subtitle'] }}
 			            </p>
@@ -91,10 +91,10 @@
 	    					{% for article in articles %}
 	    						<div class="col-md-12">
 		    						<div class="blog-entry ftco-animate">
-		    							<a href="/article/{{article['category']}}/{{article['id']}}" class="img" style="background-image: url(../static/images/image_4.jpg);"></a>
+		    							<a href="/article/{{article['category']}}/{{article['created']}}" class="img" style="background-image: url(../static/images/image_4.jpg);"></a>
 		    							<div class="text pt-2 mt-3">
 						          	<span class="category mb-1 d-block"><a href="#">{{title}}</a></span>
-					              <h3 class="mb-4"><a href="/article/{{article['category']}}/{{article['id']}}">{{article['title']}}</a></h3>
+					              <h3 class="mb-4"><a href="/article/{{article['category']}}/{{article['created']}}">{{article['title']}}</a></h3>
 					              <p class="mb-4">{{article['content'][0]}}</p>
 					              <div class="author mb-4 d-flex align-items-center">
 					            		<a href="{{ url_for('about') }}" class="img" style="background-image: url(../static/images/profilepic.png);"></a>
@@ -114,7 +114,7 @@
 					              	</div>
 
 					              	<div class="half">
-						              	<p><a href="/article/{{article['category']}}/{{article['id']}}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
+						              	<p><a href="/article/{{article['category']}}/{{article['created']}}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
 					              	</div>
 					              </div>
 					            </div>

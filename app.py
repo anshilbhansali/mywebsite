@@ -3,6 +3,7 @@ from flask import render_template
 import random
 import json
 import boto3
+from boto3.dynamodb.conditions import Key, Attr
 from datetime import datetime
 
 app = Flask(__name__)
@@ -18,10 +19,12 @@ with open('config.json') as f:
 	SECRET_KEY = data['secret_key']
 	BUCKET = data['bucket']
 
-s3 = boto3.client('s3',
+dynamodb = boto3.resource(
+	'dynamodb',
 	aws_access_key_id=ACCESS_KEY,
-	aws_secret_access_key=SECRET_KEY
-)
+	aws_secret_access_key=SECRET_KEY,
+	region_name='us-east-2'
+	)
 
 month_map = {
 	1: "January",
@@ -53,22 +56,23 @@ lowerize = lambda c: c.lower().replace(" ", "_")
 @app.route('/')
 @app.route('/index')
 def index():
-	tech_keys = [o['Key'] for o in s3.list_objects_v2(Bucket=BUCKET, Prefix='articles/technology/latest-order/').get('Contents', [])]
-	cm_keys = [o['Key'] for o in s3.list_objects_v2(Bucket=BUCKET, Prefix='articles/current_markets/latest-order/').get('Contents', [])]
-	pf_keys = [o['Key'] for o in s3.list_objects_v2(Bucket=BUCKET, Prefix='articles/personal_finance/latest-order/').get('Contents', [])]
-	
-	tech_keys = tech_keys[:5]
-	cm_keys = cm_keys[:5]
-	pf_keys = pf_keys[:5]
-
-	keys = tech_keys+cm_keys+pf_keys
 	articles = []
-	for key in keys:
-		article = json.loads(s3.get_object(Bucket=BUCKET,Key=key)['Body'].read())
-		article['created_display'] = format_created(article['created'])
-		articles.append(article)
+
+	all_articles_table = dynamodb.Table('all_articles')
+	for category in VALID_CATEGORIES:
+		results = all_articles_table.query(
+			KeyConditionExpression=Key('category').eq(titalize(category)),
+			ScanIndexForward=False, # sort in descending order of created
+			Limit=15
+			)
+		for item in results['Items']: articles.append(item)
 
 	articles.sort(key=lambda x: x['created'], reverse=True)
+	articles = articles[:15]
+	
+	for article in articles:
+		article['created_display'] = format_created(article['created'])
+
 	return render_template('index.html',
 		articles=articles,
 		category="home",
@@ -78,19 +82,22 @@ def index():
 
 @app.route('/articles/<category>')
 def articles(category):
-	category = category.lower().replace(" ", "_")
-	if category not in VALID_CATEGORIES:
+	category = lowerize(category)
+	if lowerize(category) not in VALID_CATEGORIES:
 		raise Exception('Must be a valid category: {}'.format(category))
 
-	keys = [o['Key'] for o in s3.list_objects_v2(Bucket=BUCKET, Prefix='articles/{}/latest-order/'.format(category)).get('Contents', [])]
+	all_articles = dynamodb.Table('all_articles')
+	results = all_articles.query(
+		KeyConditionExpression=Key('category').eq(titalize(category)),
+		ScanIndexForward=False,
+		Limit=15
+		)
 
 	articles = []
-	for key in keys:
-		article = json.loads(s3.get_object(Bucket=BUCKET,Key=key)['Body'].read())
-		article['created_display'] = format_created(article['created'])
-		articles.append(article)
+	for item in results['Items']:
+		item['created_display'] = format_created(item['created'])
+		articles.append(item)
 
-	title = titalize(category)
 	new_articles = [articles[0], articles[1]]
 	return render_template('articles.html',
 		articles=articles,
@@ -109,14 +116,20 @@ def about():
 def sections(current_section):
 	return render_template('sections.html', articles=articles, category=lowerize(current_section))
 
-@app.route('/article/<category>/<id>')
-def article(category, id):
-	category = category.lower().replace(" ", "_")
+@app.route('/article/<category>/<created>')
+def article(category, created):
+	category = lowerize(category)
 	if category not in VALID_CATEGORIES:
 		raise Exception('Must be a valid category: {}'.format(category))
 
-	key = 'articles/{}/by-id/{}.json'.format(category, id)
-	article = json.loads(s3.get_object(Bucket=BUCKET,Key=key)['Body'].read())
+	all_articles = dynamodb.Table('all_articles')
+	response = all_articles.get_item(
+		Key={
+		'category': titalize(category),
+		'created': created
+		}
+	)
+	article = response['Item']
 	article['created_display'] = format_created(article['created'])
 
 	return render_template('article.html',

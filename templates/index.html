@@ -80,18 +80,18 @@
     			{% for article in articles %}
 	    			<div class="col-md-4">
 	    				<div class="blog-entry ftco-animate">
-								<a href="/article/{{article['category']}}/{{article['id']}}" class="img img-2" style="background-image: url(static/images/image_12.jpg);">
+								<a href="/article/{{article['category']}}/{{article['created']}}" class="img img-2" style="background-image: url(static/images/image_12.jpg);">
 								</a>
 								<div class="text text-2 pt-2 mt-3">
 									<span class="category mb-3 d-block">
 										<a href="/articles/{{article['category']}}">{{article['category']}}</a>
 									</span>
 		              				<h3 class="mb-4">
-		              					<a href="/article/{{article['category']}}/{{article['id']}}">{{article['title']}}</a>
+		              					<a href="/article/{{article['category']}}/{{article['created']}}">{{article['title']}}</a>
 		              				</h3>
 		              				<p class="mb-4">{{article['subtitle']}}</p>
 					              	<div class="author mb-4 d-flex align-items-center">
-					            		<a href="/article/{{article['category']}}/{{article['id']}}" class="img" style="background-image: url(static/images/profilepic.png);"></a>
+					            		<a href="{{ url_for('about') }}" class="img" style="background-image: url(static/images/profilepic.png);"></a>
 					            		<div class="ml-3 info">
 					            			<span>Written by</span>
 					            			<h3><a href="{{ url_for('about') }}">Anshil Bhansali</a>, <span>{{article['created_display']}}</span></h3>
@@ -106,7 +106,7 @@
 							              	</p>
 						              	</div>
 						              	<div class="half">
-							              	<p><a href="/article/{{article['category']}}/{{article['id']}}" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
+							              	<p><a href="/article/{{article['category']}}/{{article['created']}}" class="btn py-2">Continue Reading <span class="ion-ios-arrow-forward"></span></a></p>
 						              	</div>
 						             </div>
 		            			</div>
