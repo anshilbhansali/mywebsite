@@ -2,106 +2,130 @@ from flask import Flask
 from flask import render_template
 import random
 import json
+import boto3
+from datetime import datetime
 
 app = Flask(__name__)
 
-# dummy data
-'''
-{
-	<article_id>: {
-		'content': [list of str/paragraphs],
-		'title': str,
-		'subtitle': str,
-		'id': int
-	},
+ACCESS_KEY = None
+SECRET_KEY = None
+BUCKET = None
+VALID_CATEGORIES = set(['technology', 'current_markets', 'personal_finance'])
+
+with open('config.json') as f:
+	data = json.load(f)
+	ACCESS_KEY = data['access_key']
+	SECRET_KEY = data['secret_key']
+	BUCKET = data['bucket']
+
+s3 = boto3.client('s3',
+	aws_access_key_id=ACCESS_KEY,
+	aws_secret_access_key=SECRET_KEY
+)
+
+month_map = {
+	1: "January",
+	2: "February",
+	3: "March",
+	4: "April",
+	5: "May",
+	6: "June",
+	7: "July",
+	8: "August",
+	9: "September",
+	10: "October",
+	11: "November",
+	12: "December",
 }
-'''
 
-def get_data():
-	articles, articles_by_category = None, None
-	with open('fake_data.json') as fake_data:
-		articles = json.load(fake_data)
-		articles_by_category = {
-			'technology': [articles[str(i)] for i in range(1, 8)],
-			'current_markets': [articles[str(i)] for i in range(8, 15)],
-			'personal_finance': [articles[str(i)] for i in range(15, 21)]
-		}
-	return articles, articles_by_category
-
-def titalize(category):
-	''' splits str by _ and then capitalizes each one
+def format_created(created):
+	''' Input: datetime string in format YYYY-MM-DD H:M:S
+		Output: Nov 28, 2018 
 	'''
-	return " ".join(el.capitalize() for el in category.split('_'))
+	created = datetime.strptime(created, '%Y-%m-%d %H:%M:%S').date()
+	day, month, year = created.day, created.month, created.year
+	month = month_map[month][:3]
+	return '{} {}, {}'.format(month, day, year)
 
-# PAGES 
+titalize = lambda c: " ".join(el.capitalize() for el in c.split('_'))
+lowerize = lambda c: c.lower().replace(" ", "_")
 
 @app.route('/')
 @app.route('/index')
 def index():
-	articles, articles_by_category = get_data()
+	tech_keys = [o['Key'] for o in s3.list_objects_v2(Bucket=BUCKET, Prefix='articles/technology/latest-order/').get('Contents', [])]
+	cm_keys = [o['Key'] for o in s3.list_objects_v2(Bucket=BUCKET, Prefix='articles/current_markets/latest-order/').get('Contents', [])]
+	pf_keys = [o['Key'] for o in s3.list_objects_v2(Bucket=BUCKET, Prefix='articles/personal_finance/latest-order/').get('Contents', [])]
+	
+	tech_keys = tech_keys[:5]
+	cm_keys = cm_keys[:5]
+	pf_keys = pf_keys[:5]
 
-	category = "home"
-	title = titalize(category)
+	keys = tech_keys+cm_keys+pf_keys
+	articles = []
+	for key in keys:
+		article = json.loads(s3.get_object(Bucket=BUCKET,Key=key)['Body'].read())
+		article['created_display'] = format_created(article['created'])
+		articles.append(article)
 
-	all_articles = []
-	for article_id in articles:
-		if int(article_id) in range(1,8):
-			articles[article_id]['category'] = "Technology"
-		elif int(article_id) in range(8, 15):
-			articles[article_id]['category'] = "Current Markets"
-		elif int(article_id) in range(15, 21):
-			articles[article_id]['category'] = "Personal Finance"
-
-
-		all_articles.append(articles[article_id])
-
-	random.shuffle(all_articles)
-	return render_template('index.html', articles=all_articles, category=category, title=title)
+	articles.sort(key=lambda x: x['created'], reverse=True)
+	return render_template('index.html',
+		articles=articles,
+		category="home",
+		title="Home",
+		lowerize=lowerize
+		)
 
 @app.route('/articles/<category>')
 def articles(category):
 	category = category.lower().replace(" ", "_")
-
-	articles, articles_by_category = get_data()
-	if category not in articles_by_category.keys():
+	if category not in VALID_CATEGORIES:
 		raise Exception('Must be a valid category: {}'.format(category))
 
-	title = titalize(category)
-	articles=articles_by_category[category]
+	keys = [o['Key'] for o in s3.list_objects_v2(Bucket=BUCKET, Prefix='articles/{}/latest-order/'.format(category)).get('Contents', [])]
 
-	first = random.choice([i for i in range(len(articles))])
-	second = random.choice([i for i in range(len(articles)) if i!=first])
-	new_articles = [first, second]
-	return render_template('articles.html', articles=articles, category=category, title=title, new_articles=new_articles)
+	articles = []
+	for key in keys:
+		article = json.loads(s3.get_object(Bucket=BUCKET,Key=key)['Body'].read())
+		article['created_display'] = format_created(article['created'])
+		articles.append(article)
+
+	title = titalize(category)
+	new_articles = [articles[0], articles[1]]
+	return render_template('articles.html',
+		articles=articles,
+		category=category,
+		title=titalize(category),
+		new_articles=new_articles,
+		lowerize=lowerize
+		)
 
 @app.route('/about')
 def about():
 	category = "about"
-	title = titalize(category)
-	return render_template('about.html', articles=articles, category=category, title=title)
-
-@app.route('/contact')
-def contact():
-	category = "contact"
-	title = titalize(category)
-	return render_template('contact.html', articles=articles, category=category, title=title)
+	return render_template('about.html', articles=articles, category=category, title=titalize(category))
 
 @app.route('/sections/<current_section>')
 def sections(current_section):
-	return render_template('sections.html', articles=articles, category=current_section)
+	return render_template('sections.html', articles=articles, category=lowerize(current_section))
 
-@app.route('/article/<id>')
-def article(id):
-	articles, articles_by_category = get_data()
-	title = articles[id]['title']
-	content = articles[id]['content']
-	subtitle = articles[id]['subtitle']
+@app.route('/article/<category>/<id>')
+def article(category, id):
+	category = category.lower().replace(" ", "_")
+	if category not in VALID_CATEGORIES:
+		raise Exception('Must be a valid category: {}'.format(category))
 
-	if int(id) in range(1,8): category = "technology"
-	elif int(id) in range(8, 15): category = "current_markets"
-	elif int(id) in range(15, 21): category = "personal_finance"
+	key = 'articles/{}/by-id/{}.json'.format(category, id)
+	article = json.loads(s3.get_object(Bucket=BUCKET,Key=key)['Body'].read())
+	article['created_display'] = format_created(article['created'])
 
-	return render_template('article.html', title=title, content=content, id=id, category=category, subtitle=subtitle)
+	return render_template('article.html',
+		title=article['title'],
+		content=article['content'],
+		category=article['category'],
+		subtitle=article['subtitle'],
+		lowerize=lowerize
+		)
 
 if __name__ == '__main__':
 	app.run(debug=True)
