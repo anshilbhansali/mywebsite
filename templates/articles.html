@@ -43,7 +43,7 @@
 		</aside> <!-- END COLORLIB-ASIDE -->
 		<div id="colorlib-main">
 			<section class="home-slider js-fullheight owl-carousel">
-		      <div class="slider-item js-fullheight" style="background-image:url(../static/images/bg_2.jpg);">
+		      <div class="slider-item js-fullheight" style="background-image:url({{new_articles[0]['img_1_url']}});">
 		      	<div class="overlay"></div>
 		        <div class="container-fluid">
 		          <div class="row no-gutters slider-text slider-text-2 js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -63,7 +63,7 @@
 		        </div>
 		      </div>
 
-		      <div class="slider-item js-fullheight" style="background-image:url(../static/images/bg_3.jpg);">
+		      <div class="slider-item js-fullheight" style="background-image:url({{new_articles[1]['img_2_url']}});">
 		      	<div class="overlay"></div>
 		        <div class="container-fluid">
 		          <div class="row no-gutters slider-text slider-text-2 js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -91,13 +91,13 @@
 	    					{% for article in articles %}
 	    						<div class="col-md-12">
 		    						<div class="blog-entry ftco-animate">
-		    							<a href="/article/{{article['category']}}/{{article['created']}}" class="img" style="background-image: url(../static/images/image_4.jpg);"></a>
+		    							<a href="/article/{{article['category']}}/{{article['created']}}" class="img" style="background-image: url({{article['img_1_url']}});"></a>
 		    							<div class="text pt-2 mt-3">
 						          	<span class="category mb-1 d-block"><a href="#">{{title}}</a></span>
 					              <h3 class="mb-4"><a href="/article/{{article['category']}}/{{article['created']}}">{{article['title']}}</a></h3>
 					              <p class="mb-4">{{article['content'][0]}}</p>
 					              <div class="author mb-4 d-flex align-items-center">
-					            		<a href="{{ url_for('about') }}" class="img" style="background-image: url(../static/images/profilepic.png);"></a>
+					            		<a href="{{ url_for('about') }}" class="img" style="background-image: url({{profile_pic_url}});"></a>
 					            		<div class="ml-3 info">
 					            			<span>Written by</span>
 					            			<h3><a href="{{ url_for('about') }}">Anshil Bhansali</a>, <span>{{article['created_display']}}</span></h3>
@@ -151,7 +151,7 @@
 	            <div class="sidebar-box ftco-animate">
 	              <h3 class="sidebar-heading">Popular Articles</h3>
 	              <div class="block-21 mb-4 d-flex">
-	                <a class="blog-img mr-4" style="background-image: url(../static/images/image_1.jpg);"></a>
+	                <a class="blog-img mr-4" style="background-image: url(../static/images/article_img.jpg);"></a>
 	                <div class="text">
 	                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control</a></h3>
 	                  <div class="meta">
@@ -162,7 +162,7 @@
 	                </div>
 	              </div>
 	              <div class="block-21 mb-4 d-flex">
-	                <a class="blog-img mr-4" style="background-image: url(../static/images/image_2.jpg);"></a>
+	                <a class="blog-img mr-4" style="background-image: url(../static/images/article_img.jpg);"></a>
 	                <div class="text">
 	                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control</a></h3>
 	                  <div class="meta">
@@ -173,7 +173,7 @@
 	                </div>
 	              </div>
 	              <div class="block-21 mb-4 d-flex">
-	                <a class="blog-img mr-4" style="background-image: url(../static/images/image_3.jpg);"></a>
+	                <a class="blog-img mr-4" style="background-image: url(../static/images/article_img.jpg);"></a>
 	                <div class="text">
 	                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control</a></h3>
 	                  <div class="meta">
@@ -199,7 +199,7 @@
 	              </ul>
 	            </div>
 
-							<div class="sidebar-box subs-wrap img" style="background-image: url(../static/images/bg_1.jpg);">
+							<div class="sidebar-box subs-wrap img" style="background-image: url({{newsletter_pic_url}});">
 								<div class="overlay"></div>
 								<h3 class="mb-4 sidebar-heading">Newsletter</h3>
 								<p class="mb-4">Subscribe here to receive {{title}} based content!</p>

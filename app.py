@@ -11,7 +11,11 @@ app = Flask(__name__)
 ACCESS_KEY = None
 SECRET_KEY = None
 BUCKET = None
+
 VALID_CATEGORIES = set(['technology', 'current_markets', 'personal_finance'])
+DEFAULT_ARTICLE_IMG_1_KEY = 'images/article_img_1.jpg'
+DEFAULT_ARTICLE_IMG_2_KEY = 'images/article_img_2.jpg'
+PROFILE_PIC_KEY = 'images/profilepic.png'
 
 with open('config.json') as f:
 	data = json.load(f)
@@ -25,6 +29,12 @@ dynamodb = boto3.resource(
 	aws_secret_access_key=SECRET_KEY,
 	region_name='us-east-2'
 	)
+
+s3 = boto3.client('s3',
+	aws_access_key_id=ACCESS_KEY,
+	aws_secret_access_key=SECRET_KEY
+	)
+ 
 
 month_map = {
 	1: "January",
@@ -40,6 +50,15 @@ month_map = {
 	11: "November",
 	12: "December",
 }
+
+def generate_s3_presigned_url(bucket, key):
+	return s3.generate_presigned_url('get_object',
+		Params = {
+			'Bucket': bucket,
+			'Key': key
+			},
+		ExpiresIn = 1000
+		)
 
 def format_created(created):
 	''' Input: datetime string in format YYYY-MM-DD H:M:S
@@ -72,12 +91,19 @@ def index():
 	
 	for article in articles:
 		article['created_display'] = format_created(article['created'])
+		article['img_1_url'] = generate_s3_presigned_url(BUCKET, article.get('img1_s3_key', DEFAULT_ARTICLE_IMG_1_KEY))
+		article['img_2_url'] = generate_s3_presigned_url(BUCKET, article.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
+
+	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+	profile_bg_url = generate_s3_presigned_url(BUCKET, 'images/bg_4.jpg')
 
 	return render_template('index.html',
 		articles=articles,
 		category="home",
 		title="Home",
-		lowerize=lowerize
+		lowerize=lowerize,
+		profile_pic_url=profile_pic_url,
+		profile_bg_url=profile_bg_url
 		)
 
 @app.route('/articles/<category>')
@@ -96,7 +122,12 @@ def articles(category):
 	articles = []
 	for item in results['Items']:
 		item['created_display'] = format_created(item['created'])
+		item['img_1_url'] = generate_s3_presigned_url(BUCKET, item.get('img1_s3_key', DEFAULT_ARTICLE_IMG_1_KEY))
+		item['img_2_url'] = generate_s3_presigned_url(BUCKET, item.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
 		articles.append(item)
+
+	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+	newsletter_pic_url = generate_s3_presigned_url(BUCKET, 'images/newsletter.jpg')
 
 	new_articles = [articles[0], articles[1]]
 	return render_template('articles.html',
@@ -104,13 +135,23 @@ def articles(category):
 		category=category,
 		title=titalize(category),
 		new_articles=new_articles,
-		lowerize=lowerize
+		lowerize=lowerize,
+		profile_pic_url=profile_pic_url,
+		newsletter_pic_url=newsletter_pic_url
 		)
 
 @app.route('/about')
 def about():
 	category = "about"
-	return render_template('about.html', articles=articles, category=category, title=titalize(category))
+	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+	profile_bg_url = generate_s3_presigned_url(BUCKET, 'images/bg_4.jpg')
+	return render_template('about.html',
+		articles=articles,
+		category=category,
+		title=titalize(category),
+		profile_pic_url=profile_pic_url,
+		profile_bg_url=profile_bg_url
+		)
 
 @app.route('/sections/<current_section>')
 def sections(current_section):
@@ -131,13 +172,15 @@ def article(category, created):
 	)
 	article = response['Item']
 	article['created_display'] = format_created(article['created'])
+	bg_img_url = generate_s3_presigned_url(BUCKET, article.get('bg_img_s3_key', 'images/bg_4.jpg'))
 
 	return render_template('article.html',
 		title=article['title'],
 		content=article['content'],
 		category=article['category'],
 		subtitle=article['subtitle'],
-		lowerize=lowerize
+		lowerize=lowerize,
+		bg_img_url=bg_img_url
 		)
 
 if __name__ == '__main__':
