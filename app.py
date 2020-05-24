@@ -21,6 +21,7 @@ TAG_CLOUD_MAP = {
 	"current_markets": ["tech companies", "high growth", "direct to consumer", "competitive advantage", "sustainability", "e-commerce"],
 	"personal_finance": ["money", "investing", "saving", "budget", "income", "equities", "business", "side hustle"],
 }
+NUM_ARTICLES_IN_PAGE = 4
 
 with open('config.json') as f:
 	data = json.load(f)
@@ -113,6 +114,8 @@ def index():
 
 @app.route('/articles/<category>')
 def articles(category):
+	current_page = request.args.get('page', 1)
+
 	category = lowerize(category)
 	if lowerize(category) not in VALID_CATEGORIES:
 		raise Exception('Must be a valid category: {}'.format(category))
@@ -120,12 +123,14 @@ def articles(category):
 	all_articles = dynamodb.Table('all_articles')
 	results = all_articles.query(
 		KeyConditionExpression=Key('category').eq(titalize(category)),
-		ScanIndexForward=False,
-		Limit=15
+		ScanIndexForward=False
 		)
+	result_chunks = [results['Items'][i:i+NUM_ARTICLES_IN_PAGE] for i in range(0, len(results['Items']), NUM_ARTICLES_IN_PAGE)]
+	current_result_chunk = result_chunks[int(current_page)-1]
+	pages = [str(i) for i in range(1, len(result_chunks)+1)]
 
 	articles = []
-	for item in results['Items']:
+	for item in current_result_chunk:
 		item['created_display'] = format_created(item['created'])
 		item['img_1_url'] = generate_s3_presigned_url(BUCKET, item.get('img1_s3_key', DEFAULT_ARTICLE_IMG_1_KEY))
 		item['img_2_url'] = generate_s3_presigned_url(BUCKET, item.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
@@ -134,8 +139,8 @@ def articles(category):
 	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
 	newsletter_pic_url = generate_s3_presigned_url(BUCKET, 'images/newsletter.jpg')
 
-	new_articles = [articles[0], articles[1]]
-	popular_articles = random.sample(articles, 3) # TODO: Some logic behind popular articles
+	new_articles = articles[:2]
+	popular_articles = random.sample(articles, min(2, len(articles))) # TODO: Some logic behind popular articles
 	tags = TAG_CLOUD_MAP[lowerize(category)]
 
 	return render_template('articles.html',
@@ -147,7 +152,9 @@ def articles(category):
 		lowerize=lowerize,
 		profile_pic_url=profile_pic_url,
 		newsletter_pic_url=newsletter_pic_url,
-		tags=tags
+		tags=tags,
+		current_page=current_page,
+		pages=pages
 		)
 
 @app.route('/about')
@@ -165,7 +172,9 @@ def about():
 
 @app.route('/sections/<current_section>')
 def sections(current_section):
-	return render_template('sections.html', articles=articles, category=lowerize(current_section))
+	return render_template('sections.html',
+		articles=articles,
+		category=lowerize(current_section))
 
 @app.route('/article/<category>/<created>')
 def article(category, created):
