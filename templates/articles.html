@@ -105,13 +105,15 @@
 					            	</div>
 					              <div class="meta-wrap d-md-flex align-items-center">
 
-					              	<div class="half order-md-last text-md-right" style="visibility: hidden;">
+					              	<!-- Likes, Views, Comments
+					              	<div class="half order-md-last text-md-right">
 						              	<p class="meta">
 						              		<span><i class="icon-heart"></i>3</span>
 						              		<span><i class="icon-eye"></i>100</span>
 						              		<span><i class="icon-comment"></i>5</span>
 						              	</p>
 					              	</div>
+					              	-->
 
 					              	<div class="half">
 						              	<p><a href="/article/{{article['category']}}/{{article['created']}}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
@@ -150,52 +152,29 @@
 
 	            <div class="sidebar-box ftco-animate">
 	              <h3 class="sidebar-heading">Popular Articles</h3>
-	              <div class="block-21 mb-4 d-flex">
-	                <a class="blog-img mr-4" style="background-image: url(../static/images/article_img.jpg);"></a>
-	                <div class="text">
-	                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control</a></h3>
-	                  <div class="meta">
-	                    <div><a href="#"><span class="icon-calendar"></span> Oct. 04, 2018</a></div>
-	                    <div><a href="#"><span class="icon-person"></span> Dave Lewis</a></div>
-	                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-	                  </div>
-	                </div>
-	              </div>
-	              <div class="block-21 mb-4 d-flex">
-	                <a class="blog-img mr-4" style="background-image: url(../static/images/article_img.jpg);"></a>
-	                <div class="text">
-	                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control</a></h3>
-	                  <div class="meta">
-	                    <div><a href="#"><span class="icon-calendar"></span> Oct. 04, 2018</a></div>
-	                    <div><a href="#"><span class="icon-person"></span> Dave Lewis</a></div>
-	                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-	                  </div>
-	                </div>
-	              </div>
-	              <div class="block-21 mb-4 d-flex">
-	                <a class="blog-img mr-4" style="background-image: url(../static/images/article_img.jpg);"></a>
-	                <div class="text">
-	                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control</a></h3>
-	                  <div class="meta">
-	                    <div><a href="#"><span class="icon-calendar"></span> Oct. 04, 2018</a></div>
-	                    <div><a href="#"><span class="icon-person"></span> Dave Lewis</a></div>
-	                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-	                  </div>
-	                </div>
-	              </div>
+	              {% for article in popular_articles %}
+	              	<div class="block-21 mb-4 d-flex">
+		                <a class="blog-img mr-4" style="background-image: url({{article['img_2_url']}});"></a>
+		                <div class="text">
+		                  <h3 class="heading"><a href="/article/{{article['category']}}/{{article['created']}}">{{article['title']}}</a></h3>
+		                  <div class="meta">
+		                    <div><a href="#"><span class="icon-calendar"></span> {{article['created_display']}}</a></div>
+		                    <div><a href="{{ url_for('about') }}"><span class="icon-person"></span> Anshil Bhansali</a></div>
+
+		                    <!-- Comments -->
+		                    <!-- <div><a href="#"><span class="icon-chat"></span> 19</a></div> -->
+		                  </div>
+		                </div>
+		            </div>
+	              {% endfor %}
 	            </div>
 
 	            <div class="sidebar-box ftco-animate">
 	              <h3 class="sidebar-heading">Tag Cloud</h3>
 	              <ul class="tagcloud">
-	                <a href="#" class="tag-cloud-link">animals</a>
-	                <a href="#" class="tag-cloud-link">human</a>
-	                <a href="#" class="tag-cloud-link">people</a>
-	                <a href="#" class="tag-cloud-link">cat</a>
-	                <a href="#" class="tag-cloud-link">dog</a>
-	                <a href="#" class="tag-cloud-link">nature</a>
-	                <a href="#" class="tag-cloud-link">leaves</a>
-	                <a href="#" class="tag-cloud-link">food</a>
+	              	{% for tag in tags %}
+	                <a href="#" class="tag-cloud-link">{{tag}}</a>
+	                {% endfor %}
 	              </ul>
 	            </div>
 
@@ -203,9 +182,9 @@
 								<div class="overlay"></div>
 								<h3 class="mb-4 sidebar-heading">Newsletter</h3>
 								<p class="mb-4">Subscribe here to receive {{title}} based content!</p>
-	              <form action="#" class="subscribe-form">
+	              <form id="subscribe-email-form" class="subscribe-form">
 	                <div class="form-group">
-	                  <input type="text" class="form-control" placeholder="Email Address">
+	                  <input id="email_address_input" type="text" class="form-control" placeholder="Email Address">
 	                  <input type="submit" value="Subscribe" class="mt-2 btn btn-white submit">
 	                </div>
 	              </form>
@@ -275,10 +254,41 @@
   <script src="../static/js/google-map.js"></script>
   <script src="../static/js/main.js"></script>
   <script> 
-    $(function(){
-    	$("#sections").load("../sections/"+"{{lowerize(category)}}"); 
-    });
+	$(function(){
+		$("#sections").load("../sections/"+"{{lowerize(category)}}"); 
+	});
+
+	function ValidateEmail(email) {
+		if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+			return true
+		return false
+	}
+
+	var category = "{{lowerize(category)}}";
+	$("#subscribe-email-form").submit(function(e) {
+		e.preventDefault();
+
+		let email = $("#email_address_input").val();
+		if (!ValidateEmail(email))
+			alert("You have entered an invalid email address!")
+		else{
+			let data = {
+				'category': category,
+				'email': email
+			};
+			$.post("/subscribe-email", data, function(data, status){
+				console.log("Data: " + data + "\nStatus: " + status);
+				if (status=='success'){
+					$("#email_address_input").val("");
+					alert("Successfully subscribed! :)");
+				}else{
+					alert("Something went wrong :(");
+				}
+			});
+
+		}
+	});
   </script> 
-    
+
   </body>
 </html>

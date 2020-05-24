@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask import render_template
 import random
 import json
@@ -12,10 +12,15 @@ ACCESS_KEY = None
 SECRET_KEY = None
 BUCKET = None
 
-VALID_CATEGORIES = set(['technology', 'current_markets', 'personal_finance'])
 DEFAULT_ARTICLE_IMG_1_KEY = 'images/article_img_1.jpg'
 DEFAULT_ARTICLE_IMG_2_KEY = 'images/article_img_2.jpg'
 PROFILE_PIC_KEY = 'images/profilepic.png'
+VALID_CATEGORIES = set(['technology', 'current_markets', 'personal_finance'])
+TAG_CLOUD_MAP = {
+	"technology": ["software", "cloud computing", "aws", "artificial intelligence", "operating systems", "machine learning", "containers"],
+	"current_markets": ["tech companies", "high growth", "direct to consumer", "competitive advantage", "sustainability", "e-commerce"],
+	"personal_finance": ["money", "investing", "saving", "budget", "income", "equities", "business", "side hustle"],
+}
 
 with open('config.json') as f:
 	data = json.load(f)
@@ -130,14 +135,19 @@ def articles(category):
 	newsletter_pic_url = generate_s3_presigned_url(BUCKET, 'images/newsletter.jpg')
 
 	new_articles = [articles[0], articles[1]]
+	popular_articles = random.sample(articles, 3) # TODO: Some logic behind popular articles
+	tags = TAG_CLOUD_MAP[lowerize(category)]
+
 	return render_template('articles.html',
 		articles=articles,
 		category=category,
 		title=titalize(category),
 		new_articles=new_articles,
+		popular_articles=popular_articles,
 		lowerize=lowerize,
 		profile_pic_url=profile_pic_url,
-		newsletter_pic_url=newsletter_pic_url
+		newsletter_pic_url=newsletter_pic_url,
+		tags=tags
 		)
 
 @app.route('/about')
@@ -182,6 +192,25 @@ def article(category, created):
 		lowerize=lowerize,
 		bg_img_url=bg_img_url
 		)
+
+@app.route('/subscribe-email', methods=['POST'])
+def subscribe_email():
+	email = request.values.get('email', None)
+	category = request.values.get('category', None)
+
+	if lowerize(category) not in VALID_CATEGORIES:
+		raise Exception("Must be a valid category")
+
+	emails_table = dynamodb.Table('emails')
+	emails_table.put_item(Item={
+		'category': titalize(category),
+		'email': email
+		})
+
+	ret = {
+		'response': email
+	}
+	return json.dumps(ret)
 
 if __name__ == '__main__':
 	app.run(debug=True)
