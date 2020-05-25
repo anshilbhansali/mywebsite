@@ -57,6 +57,8 @@ month_map = {
 	12: "December",
 }
 
+cache = {}
+
 def generate_s3_presigned_url(bucket, key):
 	return s3.generate_presigned_url('get_object',
 		Params = {
@@ -120,17 +122,33 @@ def articles(category):
 	if lowerize(category) not in VALID_CATEGORIES:
 		raise Exception('Must be a valid category: {}'.format(category))
 
+	# FAST CURSOR METHOD FOR PAGINATION
+	# Fetch all the keys first
 	all_articles = dynamodb.Table('all_articles')
 	results = all_articles.query(
 		KeyConditionExpression=Key('category').eq(titalize(category)),
-		ScanIndexForward=False
+		ScanIndexForward=False,
+		ProjectionExpression="category, created"
 		)
-	result_chunks = [results['Items'][i:i+NUM_ARTICLES_IN_PAGE] for i in range(0, len(results['Items']), NUM_ARTICLES_IN_PAGE)]
-	current_result_chunk = result_chunks[int(current_page)-1]
-	pages = [str(i) for i in range(1, len(result_chunks)+1)]
+	# Split keys into page-sized chunks
+	all_keys = [item for item in results['Items']]
+	all_keys_chunks = [all_keys[i:i+NUM_ARTICLES_IN_PAGE] for i in range(0, len(all_keys), NUM_ARTICLES_IN_PAGE)]
+	# Identify current chunk and start key
+	current_keys_chunk = all_keys_chunks[int(current_page)-1]
+	start_key = current_keys_chunk[0]
+
+	pages = [str(i) for i in range(1, len(all_keys_chunks)+1)]
+	cache['all_keys'] = all_keys
+
+	# query articles from start_key
+	results = all_articles.query(
+		KeyConditionExpression=Key('category').eq(start_key['category']) & Key('created').lte(start_key['created']),
+		ScanIndexForward=False,
+		Limit=NUM_ARTICLES_IN_PAGE
+		)
 
 	articles = []
-	for item in current_result_chunk:
+	for item in results['Items']:
 		item['created_display'] = format_created(item['created'])
 		item['img_1_url'] = generate_s3_presigned_url(BUCKET, item.get('img1_s3_key', DEFAULT_ARTICLE_IMG_1_KEY))
 		item['img_2_url'] = generate_s3_presigned_url(BUCKET, item.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
