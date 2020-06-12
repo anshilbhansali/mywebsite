@@ -9,6 +9,7 @@ with open('config.json') as f:
 	data = json.load(f)
 	ACCESS_KEY = data['access_key']
 	SECRET_KEY = data['secret_key']
+	BUCKET = data['bucket']
 
 dynamodb = boto3.resource(
 	'dynamodb',
@@ -16,12 +17,38 @@ dynamodb = boto3.resource(
 	aws_secret_access_key=SECRET_KEY,
 	region_name='us-east-2')
 
-with open('fake_data_v2.json') as f:
+s3_client = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
+
+with open('current_article/article.json') as f:
 	data = json.load(f)
+	data['created'] = str(datetime.now()).split('.')[0]
+
+	# upload images
+	# MAKE SURE PNGS AND JPGS ARE CORRECT
+	title = data['title']
+	# MUST BE images/<>.jpg or png
+	img1, img2, bg = 'img1.png', 'img2.png', 'bg.jpg'
+	img1_s3_key = "images/{}/{}".format(title.lower().replace(' ', ''), img1)
+	img2_s3_key = "images/{}/{}".format(title.lower().replace(' ', ''), img2)
+	bg_img_s3_key = "images/{}/{}".format(title.lower().replace(' ', ''), bg)
+	s3_client.upload_file('current_article/{}'.format(img1), BUCKET, img1_s3_key)
+	s3_client.upload_file('current_article/{}'.format(img2), BUCKET, img2_s3_key)
+	s3_client.upload_file('current_article/{}'.format(bg), BUCKET, bg_img_s3_key)
+
+	print 'Uploaded images'
+
+	data['img1_s3_key'] = img1_s3_key
+	data['img2_s3_key'] = img2_s3_key
+	data['bg_img_s3_key'] = bg_img_s3_key
+
+	# guardrails
+	if data['category'] not in ('Technology', 'Personal Finance', 'Current Markets'):
+		raise Exception('Not a valid category')
 
 	all_articles = dynamodb.Table('all_articles')
-	for id, item in data.iteritems():
-		all_articles.put_item(Item=item)
+	all_articles.put_item(Item=data)
+	print 'Uploaded article'
+	print json.dumps(data, indent=1)
 
 print 'done'
 

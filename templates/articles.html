@@ -45,7 +45,7 @@
 
 			{% if current_page=="1" %}
 			<section class="home-slider js-fullheight owl-carousel">
-		      <div class="slider-item js-fullheight" style="background-image:url({{new_articles[0]['img_1_url']}});">
+		      <div class="slider-item js-fullheight" style="background-image:url({{new_articles[0]['bg_img_url']}});">
 		      	<div class="overlay"></div>
 		        <div class="container-fluid">
 		          <div class="row no-gutters slider-text slider-text-2 js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -65,7 +65,7 @@
 		        </div>
 		      </div>
 
-		      <div class="slider-item js-fullheight" style="background-image:url({{new_articles[1]['img_2_url']}});">
+		      <div class="slider-item js-fullheight" style="background-image:url({{new_articles[1]['bg_img_url']}});">
 		      	<div class="overlay"></div>
 		        <div class="container-fluid">
 		          <div class="row no-gutters slider-text slider-text-2 js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -97,33 +97,33 @@
 		    						<div class="blog-entry ftco-animate">
 		    							<a href="/article/{{article['category']}}/{{article['created']}}" class="img" style="background-image: url({{article['img_1_url']}});"></a>
 		    							<div class="text pt-2 mt-3">
-						          	<span class="category mb-1 d-block"><a href="#">{{title}}</a></span>
-					              <h3 class="mb-4"><a href="/article/{{article['category']}}/{{article['created']}}">{{article['title']}}</a></h3>
-					              <p class="mb-4">{{article['content'][0]}}</p>
-					              <div class="author mb-4 d-flex align-items-center">
-					            		<a href="{{ url_for('about') }}" class="img" style="background-image: url({{profile_pic_url}});"></a>
-					            		<div class="ml-3 info">
-					            			<span>Written by</span>
-					            			<h3><a href="{{ url_for('about') }}">Anshil Bhansali</a>, <span>{{article['created_display']}}</span></h3>
+						          			<span class="category mb-1 d-block"><a href="#">{{title}}</a></span>
+					              			<h3 class="mb-4"><a href="/article/{{article['category']}}/{{article['created']}}">{{article['title']}}</a></h3>
+					              			<p class="mb-4">{{article['content'][0]}}</p>
+					              			<div class="author mb-4 d-flex align-items-center">
+					            				<a href="{{ url_for('about') }}" class="img" style="background-image: url({{profile_pic_url}});"></a>
+					            				<div class="ml-3 info">
+					            					<span>Written by</span>
+					            					<h3><a href="{{ url_for('about') }}">Anshil Bhansali</a>, <span>{{article['created_display']}}</span></h3>
+					            				</div>
+					            			</div>
+					              			<div class="meta-wrap d-md-flex align-items-center">
+
+							              	<!-- Likes, Views, Comments
+							              	<div class="half order-md-last text-md-right">
+								              	<p class="meta">
+								              		<span><i class="icon-heart"></i>3</span>
+								              		<span><i class="icon-eye"></i>100</span>
+								              		<span><i class="icon-comment"></i>5</span>
+								              	</p>
+							              	</div>
+							              	-->
+
+								              	<div class="half">
+									              	<p><a href="/article/{{article['category']}}/{{article['created']}}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
+								              	</div>
+					              			</div>
 					            		</div>
-					            	</div>
-					              <div class="meta-wrap d-md-flex align-items-center">
-
-					              	<!-- Likes, Views, Comments
-					              	<div class="half order-md-last text-md-right">
-						              	<p class="meta">
-						              		<span><i class="icon-heart"></i>3</span>
-						              		<span><i class="icon-eye"></i>100</span>
-						              		<span><i class="icon-comment"></i>5</span>
-						              	</p>
-					              	</div>
-					              	-->
-
-					              	<div class="half">
-						              	<p><a href="/article/{{article['category']}}/{{article['created']}}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
-					              	</div>
-					              </div>
-					            </div>
 		    						</div>
 		    					</div>
 	    					{% endfor %}

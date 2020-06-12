@@ -14,6 +14,7 @@ BUCKET = None
 
 DEFAULT_ARTICLE_IMG_1_KEY = 'images/article_img_1.jpg'
 DEFAULT_ARTICLE_IMG_2_KEY = 'images/article_img_2.jpg'
+DEFAULT_BG_IMG_KEY = 'images/bg_4.jpg'
 PROFILE_PIC_KEY = 'images/profilepic.png'
 VALID_CATEGORIES = set(['technology', 'current_markets', 'personal_finance'])
 TAG_CLOUD_MAP = {
@@ -103,7 +104,7 @@ def index():
 		article['img_2_url'] = generate_s3_presigned_url(BUCKET, article.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
 
 	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
-	profile_bg_url = generate_s3_presigned_url(BUCKET, 'images/bg_4.jpg')
+	profile_bg_url = generate_s3_presigned_url(BUCKET, 'images/spotlight.jpg')
 
 	return render_template('index.html',
 		articles=articles,
@@ -152,6 +153,10 @@ def articles(category):
 		item['created_display'] = format_created(item['created'])
 		item['img_1_url'] = generate_s3_presigned_url(BUCKET, item.get('img1_s3_key', DEFAULT_ARTICLE_IMG_1_KEY))
 		item['img_2_url'] = generate_s3_presigned_url(BUCKET, item.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
+		item['bg_img_url'] = generate_s3_presigned_url(BUCKET, item.get('bg_img_s3_key', DEFAULT_BG_IMG_KEY))
+
+		item['img_url'] = random.choice([item['img_1_url'], item['img_2_url']])
+
 		articles.append(item)
 
 	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
@@ -179,7 +184,7 @@ def articles(category):
 def about():
 	category = "about"
 	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
-	profile_bg_url = generate_s3_presigned_url(BUCKET, 'images/bg_4.jpg')
+	profile_bg_url = generate_s3_presigned_url(BUCKET, 'images/spotlight.jpg')
 	return render_template('about.html',
 		articles=articles,
 		category=category,
@@ -209,7 +214,8 @@ def article(category, created):
 	)
 	article = response['Item']
 	article['created_display'] = format_created(article['created'])
-	bg_img_url = generate_s3_presigned_url(BUCKET, article.get('bg_img_s3_key', 'images/bg_4.jpg'))
+	bg_img_url = generate_s3_presigned_url(BUCKET, article.get('bg_img_s3_key', DEFAULT_BG_IMG_KEY))
+	img2_url = generate_s3_presigned_url(BUCKET, article.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
 
 	return render_template('article.html',
 		title=article['title'],
@@ -217,7 +223,8 @@ def article(category, created):
 		category=article['category'],
 		subtitle=article['subtitle'],
 		lowerize=lowerize,
-		bg_img_url=bg_img_url
+		bg_img_url=bg_img_url,
+		img2_url=img2_url
 		)
 
 @app.route('/subscribe-email', methods=['POST'])
