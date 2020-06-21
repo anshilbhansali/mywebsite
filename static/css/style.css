@@ -7272,8 +7272,7 @@ body {
   background: #fff;
   font-size: 15px;
   line-height: 1.8;
-  font-weight: 500;
-  color: #999999; }
+  font-weight: 500; }
   body.offcanvas {
     overflow-x: hidden; }
     body.offcanvas #colorlib-aside {
@@ -7590,7 +7589,6 @@ h1, h2, h3, h4, h5,
       border-radius: 50%; }
     .hero-wrap .text .subheading {
       font-size: 24px;
-      color: #bfbfbf;
       font-weight: 300; }
     .hero-wrap .text h1 {
       letter-spacing: 1px;
