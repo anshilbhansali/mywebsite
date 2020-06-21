@@ -57,7 +57,11 @@
               <h2 class="subheading">{{subtitle}}</h2>
               <div class="img mb-4" style="background-image: url({{img2_url}}); margin-top: 50px; width:500px; height: 300px; border-radius: 1%"></div>
               {% for para in content %}
-                <p class="mb-4">{{para}}</p>
+                {% if para.find("[") != -1 %}
+                  <p class="mb-4">{{para[0:para.find("[")]}} <a href={{para[para.find("[")+1:para.find("]")].split("|")[1]}} target="_blank">{{para[para.find("[")+1:para.find("]")].split("|")[0]}}</a> {{para[para.find("]")+1:]}}</p>
+                {% else %}
+                  <p class="mb-4">{{para}}</p>
+                {% endif %}
               {% endfor %}
 							<ul class="ftco-social mt-3">
                 <li class="ftco-animate"><a href="https://github.com/anshilbhansali/"><span class="icon-github"></span></a></li>

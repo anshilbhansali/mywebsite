@@ -20,6 +20,9 @@ dynamodb = boto3.resource(
 s3_client = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
 
 with open('current_article/article.json') as f:
+	''' Rules for adding links to words
+		format: blah blah blah [word-to-be-linked|link] blah blah
+	'''
 	data = json.load(f)
 	data['created'] = str(datetime.now()).split('.')[0]
 
