@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 import boto3
+import shutil
 
 ACCESS_KEY = None
 SECRET_KEY = None
@@ -30,7 +31,7 @@ with open('current_article/article.json') as f:
 	# MAKE SURE PNGS AND JPGS ARE CORRECT
 	title = data['title']
 	# MUST BE images/<>.jpg or png
-	bg, img1, img2 = 'bg.jpg', 'img1.jpg', 'img2.png'
+	bg, img1, img2 = 'bg.png', 'img1.jpg', 'img2.jpg'
 	img1_s3_key = "images/{}/{}".format(title.lower().replace(' ', ''), img1)
 	img2_s3_key = "images/{}/{}".format(title.lower().replace(' ', ''), img2)
 	bg_img_s3_key = "images/{}/{}".format(title.lower().replace(' ', ''), bg)
@@ -52,6 +53,10 @@ with open('current_article/article.json') as f:
 	all_articles.put_item(Item=data)
 	print 'Uploaded article'
 	print json.dumps(data, indent=1)
+
+	source, dest = 'current_article/{}'.format(bg), 'old_bgs/{}-{}'.format(str(datetime.now()), bg)
+	shutil.copyfile(source, dest)
+	print 'Copied background img to {}'.format(dest)
 
 print 'done'
 
