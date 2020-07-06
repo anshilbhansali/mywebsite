@@ -15,6 +15,9 @@ BUCKET = None
 DEFAULT_ARTICLE_IMG_1_KEY = 'images/article_img_1.jpg'
 DEFAULT_ARTICLE_IMG_2_KEY = 'images/article_img_2.jpg'
 DEFAULT_BG_IMG_KEY = 'images/bg_4.jpg'
+DEFAULT_IMG2_WIDTH = 500
+DEFAULT_IMG2_HEIGHT = 300
+
 PROFILE_PIC_KEY = 'images/profilepic.png'
 VALID_CATEGORIES = set(['technology', 'current_markets', 'personal_finance'])
 TAG_CLOUD_MAP = {
@@ -216,6 +219,9 @@ def article(category, created):
 	article['created_display'] = format_created(article['created'])
 	bg_img_url = generate_s3_presigned_url(BUCKET, article.get('bg_img_s3_key', DEFAULT_BG_IMG_KEY))
 	img2_url = generate_s3_presigned_url(BUCKET, article.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
+	img2_width = DEFAULT_IMG2_WIDTH if article.get('img2_width', None)==None else article.get('img2_width')
+	img2_height = DEFAULT_IMG2_HEIGHT if article.get('img2_height', None)==None else article.get('img2_height')
+	print article.get('img2_width', None)
 
 	return render_template('article.html',
 		title=article['title'],
@@ -224,7 +230,9 @@ def article(category, created):
 		subtitle=article['subtitle'],
 		lowerize=lowerize,
 		bg_img_url=bg_img_url,
-		img2_url=img2_url
+		img2_url=img2_url,
+		img2_width=img2_width,
+		img2_height=img2_height
 		)
 
 @app.route('/subscribe-email', methods=['POST'])

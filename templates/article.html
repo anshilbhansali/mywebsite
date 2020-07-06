@@ -55,7 +55,7 @@
 						<div class="desc" style="margin-top: 50px;">
               <h1 class="mb-4">{{title}}</h1>
               <h2 class="subheading">{{subtitle}}</h2>
-              <div class="img mb-4" style="background-image: url({{img2_url}}); margin-top: 50px; width:500px; height: 300px; border-radius: 1%"></div>
+              <div class="img mb-4" style="background-image: url({{img2_url}}); margin-top: 50px; width:{{img2_width}}px; height: {{img2_height}}px; border-radius: 1%"></div>
               {% for para in content %}
                 {% if para.find("[") != -1 %}
                   <p class="mb-4">{{para[0:para.find("[")]}} <a href={{para[para.find("[")+1:para.find("]")].split("|")[1]}} target="_blank">{{para[para.find("[")+1:para.find("]")].split("|")[0]}}</a> {{para[para.find("]")+1:]}}</p>
