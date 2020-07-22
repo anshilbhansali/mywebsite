@@ -5,6 +5,7 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 from datetime import datetime
+from botocore.client import Config
 
 app = Flask(__name__)
 
@@ -41,6 +42,8 @@ dynamodb = boto3.resource(
 	)
 
 s3 = boto3.client('s3',
+	'us-east-2',
+	config=Config(s3={'addressing_style': 'path'}),
 	aws_access_key_id=ACCESS_KEY,
 	aws_secret_access_key=SECRET_KEY
 	)
@@ -221,7 +224,6 @@ def article(category, created):
 	img2_url = generate_s3_presigned_url(BUCKET, article.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
 	img2_width = DEFAULT_IMG2_WIDTH if article.get('img2_width', None)==None else article.get('img2_width')
 	img2_height = DEFAULT_IMG2_HEIGHT if article.get('img2_height', None)==None else article.get('img2_height')
-	print article.get('img2_width', None)
 
 	return render_template('article.html',
 		title=article['title'],
@@ -255,4 +257,4 @@ def subscribe_email():
 	return json.dumps(ret)
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(host='0.0.0.0') # default port is 5000
