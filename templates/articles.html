@@ -44,6 +44,7 @@
 		<div id="colorlib-main">
 
 			{% if current_page=="1" %}
+		<div id="top-section">
 			<section class="home-slider js-fullheight owl-carousel">
 		      <div class="slider-item js-fullheight" style="background-image:url({{new_articles[0]['bg_img_url']}});">
 		      	<div class="overlay"></div>
@@ -85,6 +86,7 @@
 		        </div>
 		      </div>
 	    	</section>
+	    </div>
 	    	{% endif %}
 
 			<section class="ftco-section">
@@ -259,8 +261,15 @@
   <script src="../static/js/main.js"></script>
   <script> 
 	$(function(){
-		$("#sections").load("../sections/"+"{{lowerize(category)}}"); 
+		$("#sections").load("../sections/"+"{{lowerize(category)}}");
 	});
+
+	console.log(window.screen.width);
+	if (window.screen.width<=450){
+		console.log("here");
+		$("#top-section").hide();
+	}
+
 
 	function ValidateEmail(email) {
 		if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
@@ -292,6 +301,7 @@
 
 		}
 	});
+
   </script> 
 
   </body>
