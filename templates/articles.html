@@ -137,9 +137,9 @@
 			              <ul>
 			                {% for page in pages %}
 			                	{% if current_page==page %}
-				                <li class="active"><a href="/articles/technology?page={{page}}">{{page}}</a></li>
+				                <li class="active"><a href="/articles/{{category}}?page={{page}}">{{page}}</a></li>
 				                {% else %}
-				                <li ><a href="/articles/technology?page={{page}}">{{page}}</a></li>
+				                <li ><a href="/articles/{{category}}?page={{page}}">{{page}}</a></li>
 				                {% endif %}
 			                {% endfor %}
 			              </ul>
