@@ -256,5 +256,9 @@ def subscribe_email():
 	}
 	return json.dumps(ret)
 
+@app.route('/sitemap', methods=['GET'])
+def sitemap():
+	return render_template('sitemap.xml')
+
 if __name__ == '__main__':
 	app.run(host='0.0.0.0') # default port is 5000
