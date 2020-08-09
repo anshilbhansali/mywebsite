@@ -66,7 +66,24 @@
 						<div class="desc" style="margin-top: 50px;">
               <h1 class="mb-4">{{title}}</h1>
               <h2 class="subheading">{{subtitle}}</h2>
-              <div class="img mb-4" style="background-image: url({{img2_url}}); margin-top: 50px; width:{{img2_width}}px; height: {{img2_height}}px; border-radius: 1%"></div>
+
+              <div class="author mb-4 d-flex align-items-center">
+                  {% if author_link: %}
+                    <a href="{{ author_link }}" target="_blank" class="img" style="background-image: url({{author_img_url}});width: 70px; height: 70px; margin-right: 10px; margin-left: 130px;"></a>
+                  {% else %}
+                    <a href="{{ url_for('about') }}" target="_blank" class="img" style="background-image: url({{author_img_url}});width: 70px; height: 70px; margin-right: 10px; margin-left: 130px;"></a>
+                  {% endif %}
+
+                <div class="">
+                  {% if author_link: %}
+                    <p style="margin-top: 15px;"><a href="{{ author_link }}" target="_blank">{{author}}</a>, {{created_display}}</p>
+                  {% else %}
+                    <p style="margin-top: 15px;"><a href="{{ url_for('about') }}" target="_blank">{{author}}</a>, {{created_display}}</p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="img mb-4" style="background-image: url({{img2_url}}); margin-top: 30px; width:{{img2_width}}px; height: {{img2_height}}px; border-radius: 1%"></div>
               {% for para in content %}
                 {% if para.find("[") != -1 %}
                   <p class="mb-4">{{para[0:para.find("[")]}} <a href={{para[para.find("[")+1:para.find("]")].split("|")[1]}} target="_blank">{{para[para.find("[")+1:para.find("]")].split("|")[0]}}</a> {{para[para.find("]")+1:]}}</p>

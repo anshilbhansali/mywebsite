@@ -115,11 +115,20 @@
 					              			<h3 class="mb-4"><a href="/article/{{article['category']}}/{{article['created']}}">{{article['title']}}</a></h3>
 					              			<p class="mb-4">{{article['content'][0]}}</p>
 					              			<div class="author mb-4 d-flex align-items-center">
-					            				<a href="{{ url_for('about') }}" class="img" style="background-image: url({{profile_pic_url}});"></a>
+					            				{% if article.get('author_link'): %}
+						                            <a href="{{ article['author_link'] }}" class="img" style="background-image: url({{article['author_img_url']}});"></a>
+						                        {% else %}
+						                        	<a href="{{ url_for('about') }}" class="img" style="background-image: url({{article['author_img_url']}});"></a>
+						                        {% endif %}
+
 					            				<div class="ml-3 info">
 					            					<span>Written by</span>
-					            					<h3><a href="{{ url_for('about') }}">Anshil Bhansali</a>, <span>{{article['created_display']}}</span></h3>
-					            				</div>
+				                            		{% if article.get('author_link'): %}
+									        			<h3><a href="{{ article['author_link'] }}">{{article['author']}}</a>, <span>{{article['created_display']}}</span></h3>
+				                            		{% else %}
+				                              			<h3><a href="{{ url_for('about') }}">{{article['author']}}</a>, <span>{{article['created_display']}}</span></h3>
+				                            		{% endif %}
+									            </div>
 					            			</div>
 					              			<div class="meta-wrap d-md-flex align-items-center">
 
