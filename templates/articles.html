@@ -113,7 +113,13 @@
 		    							<div class="text pt-2 mt-3">
 						          			<span class="category mb-1 d-block"><a href="#">{{title}}</a></span>
 					              			<h3 class="mb-4"><a href="/article/{{article['category']}}/{{article['created']}}">{{article['title']}}</a></h3>
-					              			<p class="mb-4">{{article['content'][0]}}</p>
+
+					              			{% if article['content'][0].find("[") != -1 %}
+							                  <p class="mb-4">{{article['content'][0][0:article['content'][0].find("[")]}} <a href={{article['content'][0][article['content'][0].find("[")+1:article['content'][0].find("]")].split("|")[1]}} target="_blank">{{article['content'][0][article['content'][0].find("[")+1:article['content'][0].find("]")].split("|")[0]}}</a> {{article['content'][0][article['content'][0].find("]")+1:]}}</p>
+							                {% else %}
+							                  <p class="mb-4">{{article['content'][0]}}</p>
+							                {% endif %}
+
 					              			<div class="author mb-4 d-flex align-items-center">
 					            				{% if article.get('author_link'): %}
 						                            <a href="{{ article['author_link'] }}" class="img" style="background-image: url({{article['author_img_url']}});"></a>

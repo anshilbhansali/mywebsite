@@ -109,7 +109,12 @@ def index():
 		article['created_display'] = format_created(article['created'])
 		article['img_1_url'] = generate_s3_presigned_url(BUCKET, article.get('img1_s3_key', DEFAULT_ARTICLE_IMG_1_KEY))
 		article['img_2_url'] = generate_s3_presigned_url(BUCKET, article.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
-		article['author_img_url'] = generate_s3_presigned_url(BUCKET, article.get('author_img_s3_key', PROFILE_PIC_KEY))
+
+		if article.get('author_img_s3_key'):
+			article['author_img_url'] = generate_s3_presigned_url(BUCKET, article.get('author_img_s3_key'))
+		else:
+			article['author_img_url'] = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+
 		if not article.get('author'):
 			article['author'] = DEFAULT_AUTHOR
 
@@ -164,7 +169,12 @@ def articles(category):
 		item['img_1_url'] = generate_s3_presigned_url(BUCKET, item.get('img1_s3_key', DEFAULT_ARTICLE_IMG_1_KEY))
 		item['img_2_url'] = generate_s3_presigned_url(BUCKET, item.get('img2_s3_key', DEFAULT_ARTICLE_IMG_2_KEY))
 		item['bg_img_url'] = generate_s3_presigned_url(BUCKET, item.get('bg_img_s3_key', DEFAULT_BG_IMG_KEY))
-		item['author_img_url'] = generate_s3_presigned_url(BUCKET, item.get('author_img_s3_key', PROFILE_PIC_KEY))
+
+		if item.get('author_img_s3_key'):
+			item['author_img_url'] = generate_s3_presigned_url(BUCKET, item.get('author_img_s3_key'))
+		else:
+			item['author_img_url'] = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+
 		if not item.get('author'):
 			item['author'] = DEFAULT_AUTHOR
 
@@ -233,7 +243,12 @@ def article(category, created):
 	img2_width = DEFAULT_IMG2_WIDTH if article.get('img2_width', None)==None else article.get('img2_width')
 	img2_height = DEFAULT_IMG2_HEIGHT if article.get('img2_height', None)==None else article.get('img2_height')
 	author = article.get('author', DEFAULT_AUTHOR)
-	author_img_url = generate_s3_presigned_url(BUCKET, article.get('author_img_s3_key', PROFILE_PIC_KEY))
+
+	if article.get('author_img_s3_key'):
+		author_img_url = generate_s3_presigned_url(BUCKET, article.get('author_img_s3_key'))
+	else:
+		author_img_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+
 	author_link = article.get('author_link', None)
 
 	return render_template('article.html',
