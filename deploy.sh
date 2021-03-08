@@ -5,17 +5,20 @@ echo "Starting to build docker image"
 echo "********************************************************************"
 echo " "
 docker build -t anshils-website .
+echo " "
 echo "********************************************************************"
 echo "Docker image built, now tagging it"
 echo "********************************************************************"
 echo " "
 docker tag anshils-website 848744644080.dkr.ecr.us-east-2.amazonaws.com/anshils-website
+echo " "
 echo "********************************************************************"
 echo "Tagging done, now pushing to ECR"
 echo "********************************************************************"
 echo " "
 $(aws ecr get-login --no-include-email --region us-east-2)
 docker push 848744644080.dkr.ecr.us-east-2.amazonaws.com/anshils-website
+echo " "
 echo "********************************************************************"
 echo "Pushed to ECR"
 echo "********************************************************************"
@@ -26,4 +29,14 @@ echo "Now forcing new deployment for ecs service"
 echo "********************************************************************"
 echo " "
 aws ecs update-service --cluster anshils-website-cluster --service anshils-website-container-service --force-new-deployment
+
+echo " "
+echo "********************************************************************"
+echo "Pushing code changes to git with standard commit message"
+echo "********************************************************************"
+echo " "
+git add .
+git commit -m "deployment change"
+git push
+
 echo "Done"

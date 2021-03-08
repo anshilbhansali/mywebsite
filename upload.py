@@ -31,7 +31,7 @@ with open('current_article/article.json') as f:
 	# MAKE SURE PNGS AND JPGS ARE CORRECT
 	title = data['title']
 	# MUST BE images/<>.jpg or png
-	bg, img1, img2 = 'bg.png', 'img1.jpg', 'img2.png'
+	bg, img1, img2 = 'bg.jpg', 'img1.jpg', 'img2.png'
 	img1_s3_key = "images/{}/{}".format(title.lower().replace(' ', ''), img1)
 	img2_s3_key = "images/{}/{}".format(title.lower().replace(' ', ''), img2)
 	bg_img_s3_key = "images/{}/{}".format(title.lower().replace(' ', ''), bg)
