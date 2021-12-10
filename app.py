@@ -118,7 +118,7 @@ def index():
 		if not article.get('author'):
 			article['author'] = DEFAULT_AUTHOR
 
-	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+	profile_pic_url = "static/images/brooklynbridge.png"
 	profile_bg_url = generate_s3_presigned_url(BUCKET, 'images/spotlight.jpg')
 
 	return render_template('index.html',
@@ -206,8 +206,8 @@ def articles(category):
 @app.route('/about')
 def about():
 	category = "about"
-	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
 	profile_bg_url = generate_s3_presigned_url(BUCKET, 'images/spotlight.jpg')
+	profile_pic_url = 'static/images/sipping.png'
 	return render_template('about.html',
 		articles=articles,
 		category=category,
