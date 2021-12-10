@@ -39,7 +39,7 @@ with open('current_article/article.json') as f:
 	s3_client.upload_file('current_article/{}'.format(img2), BUCKET, img2_s3_key)
 	s3_client.upload_file('current_article/{}'.format(bg), BUCKET, bg_img_s3_key)
 
-	print 'Uploaded images'
+	print('Uploaded images')
 
 	data['img1_s3_key'] = img1_s3_key
 	data['img2_s3_key'] = img2_s3_key
@@ -51,12 +51,12 @@ with open('current_article/article.json') as f:
 
 	all_articles = dynamodb.Table('all_articles')
 	all_articles.put_item(Item=data)
-	print 'Uploaded article'
-	print json.dumps(data, indent=1)
+	print('Uploaded article')
+	print(json.dumps(data, indent=1))
 
 	source, dest = 'current_article/{}'.format(bg), 'old_bgs/{}-{}'.format(str(datetime.now()), bg)
 	shutil.copyfile(source, dest)
-	print 'Copied background img to {}'.format(dest)
+	print('Copied background img to {}'.format(dest))
 
-print 'done'
+print('done')
 
