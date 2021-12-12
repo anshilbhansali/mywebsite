@@ -29,6 +29,15 @@ TAG_CLOUD_MAP = {
 }
 NUM_ARTICLES_IN_PAGE = 4
 
+PROFILE_PHOTOS = [
+"static/images/brooklynbridge.png",
+"static/images/sipping.png",
+"static/images/sitting.png",
+"static/images/peakyblinderme.png",
+"static/images/rooftop.png",
+"static/images/profilepic.png",
+]
+
 with open('config.json') as f:
 	data = json.load(f)
 	ACCESS_KEY = data['access_key']
@@ -113,7 +122,7 @@ def index():
 		if article.get('author_img_s3_key'):
 			article['author_img_url'] = generate_s3_presigned_url(BUCKET, article.get('author_img_s3_key'))
 		else:
-			article['author_img_url'] = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+			article['author_img_url'] = "../{}".format(random.choice(PROFILE_PHOTOS))
 
 		if not article.get('author'):
 			article['author'] = DEFAULT_AUTHOR
@@ -173,7 +182,7 @@ def articles(category):
 		if item.get('author_img_s3_key'):
 			item['author_img_url'] = generate_s3_presigned_url(BUCKET, item.get('author_img_s3_key'))
 		else:
-			item['author_img_url'] = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+			item['author_img_url'] = "../{}".format(random.choice(PROFILE_PHOTOS))
 
 		if not item.get('author'):
 			item['author'] = DEFAULT_AUTHOR
@@ -182,7 +191,7 @@ def articles(category):
 
 		articles.append(item)
 
-	profile_pic_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+	profile_pic_url = "static/images/brooklynbridge.png"
 	newsletter_pic_url = generate_s3_presigned_url(BUCKET, 'images/newsletter.jpg')
 
 	new_articles = articles[:2]
@@ -247,7 +256,7 @@ def article(category, created):
 	if article.get('author_img_s3_key'):
 		author_img_url = generate_s3_presigned_url(BUCKET, article.get('author_img_s3_key'))
 	else:
-		author_img_url = generate_s3_presigned_url(BUCKET, PROFILE_PIC_KEY)
+		author_img_url = "../../{}".format(random.choice(PROFILE_PHOTOS))
 
 	author_link = article.get('author_link', None)
 
@@ -289,6 +298,14 @@ def subscribe_email():
 @app.route('/sitemap', methods=['GET'])
 def sitemap():
 	return render_template('sitemap.xml')
+
+@app.route('/cargame', methods=['GET'])
+def cargame():
+	return render_template('cargame.html')
+
+@app.route('/balleater', methods=['GET'])
+def balleater():
+	return render_template('balleater.html')
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0') # default port is 5000

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html>
+<script src="../static/js/processing.js"></script>
+<script type="application/processing" data-processing-target="pjs">
+void setup() {
+  size(400, 400);
+  
+}
+var x1=400;
+var x2=400;
+var x3=400;
+var x4=400;
+var x5=400;
+var y1=random(0,400);
+var y2=random(0,400);
+var y3=random(0,400);
+var y4=random(0,400);
+var y5=random(0,400);
+var n=0;
+var nspeed=1;
+var x1s=2;
+var x2s=3;
+var x3s=5;
+var x4s=4;
+var x5s=3.5;
+var r=30;
+var acc=0;
+
+void init_objects()
+{
+    fill(0, 0, 0);
+    ellipse(x1,y1,r,r);
+    fill(250, 250, 250);
+    ellipse(x1,y1,r/2,r/2);
+    
+    fill(0, 0, 0);
+    ellipse(x2,y2,r,r);
+    fill(250, 247, 247);
+    ellipse(x2,y2,r/2,r/2);
+    
+    fill(0, 0, 0);
+    ellipse(x3,y3,r,r);
+    fill(247, 244, 244);
+    ellipse(x3,y3,r/2,r/2);
+    
+    fill(0, 0, 0);
+    ellipse(x4,y4,r,r);
+    fill(250, 247, 247);
+    ellipse(x4,y4,r/2,r/2);
+    
+    fill(0, 0, 0);
+    ellipse(x5,y5,r,r);
+    fill(250, 250, 250);
+    ellipse(x5,y5,r/2,r/2);
+
+    fill(0, 255, 9);
+    rect(25,mouseY-8,40,8);//roof
+    
+    fill(9, 27, 224);
+    rect(10,mouseY,70,20);//car
+    
+    fill(46, 44, 44);
+    ellipse(25,mouseY+20,15,15);//wheel
+    ellipse(65,mouseY+20, 15,15);//wheel
+
+}
+
+void update()
+{
+    x1-=x1s;
+    x2-=x2s;
+    x3-=x3s;
+    x4-=x4s;
+    x5-=x5s;
+    n+=nspeed;
+    x1s+=acc;
+    x2s+=acc;
+    x3s+=acc;
+    x4s+=acc;
+    x5s+=acc;
+}
+
+
+void end_game(x,y)
+{
+    if (x<90 && y<mouseY+30 && y>mouseY-20 )
+    {
+        nspeed=0;
+        x1s=0;
+        x2s=0;
+        x3s=0;
+        x4s=0;
+        x5s=0;
+        textSize(30);
+        text("Your score is " + n, 100,200);
+        text("Refresh Page", 120,230);
+        acc=0;
+        noLoop();
+    
+    }
+}
+
+void draw()
+{
+
+    background (14, 220, 235);
+   
+    
+    init_objects();
+    
+    textSize(20);
+    text("Score", 340,30);
+    text (n,340,50);
+
+    update();
+    
+    //refresh tires
+    if (x1<0){
+         x1=400;
+         y1=random(0,380);
+    }
+    
+    if (x2<0){
+        x2=400;
+        y2=random(0,380);
+    }
+    if (x3<0){
+        x3=400;
+        y3=random(0,380);
+    }
+    if (x4<0){
+        x4=400;
+        y4=random(0,380);
+    }
+    if(x5<0){
+        x5=400;
+        y5=random(0,380);
+    }
+    
+    
+    end_game(x1, y1);
+    end_game(x2, y2);
+    end_game(x3, y3);
+    end_game(x4, y4);
+    end_game(x5, y5);
+
+    
+
+}
+
+</script>
+<canvas id="pjs"> </canvas>
+
+</html>

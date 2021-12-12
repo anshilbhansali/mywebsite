@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html>
+
+<script src="../static/js/processing.js"></script>
+<script type="application/processing" data-processing-target="pjs">
+void setup() {
+  size(400, 400);
+  
+}
+
+noStroke();
+var r=35;
+var r1=10;
+var x=200,y=200 ;
+var x1=random(0,400);
+var y1=random(0,400);
+var x2=random(0,400);
+var y2=random(0,400);
+var x3=random(0,400);
+var y3=random(0,400);
+var x4=random(0,400);
+var y4=random(0,400);
+var x5=random(0,400);
+var y5=random(0,400);
+var n=0;
+var nspeed=1;
+var xBig1=random(0,380);
+var yBig1=5;
+var xBig2=0;
+var yBig2=random(0,400);
+var xBig3=random(0,400);
+var yBig3=0;
+var rbig1=60;
+var rbig2=60;
+var rbig3=60;
+
+var s0=random(4,9);
+var s1=random(1,3);
+var s2=random(1,4);
+var s3=random(1,4);
+
+var rspeed=1;
+
+var dx=x;
+var dy=y;
+
+
+var currScene=1;
+
+
+
+var end=function()
+{
+    currScene=4;
+       s0=0;
+       s1=0;
+       s2=0;
+       s3=0;
+       rspeed=0;
+       nspeed=0;
+         
+       fill(213, 0, 255);
+       textSize(30);
+       text("You got hit",30,200);
+       textSize(20);
+       text("Your score:"+n,30,220);
+       text("Press play again", 30,240);
+       rect(30,250,80,30);
+       fill(228, 235, 21);
+       textSize(15);
+       text("Play again", 35,270);
+      //noLoop();
+       
+
+};
+
+var outside=function(x,y)
+{
+    return x<0 || x>400 || y<0 || y>400 ;
+};
+
+var hit=function(x,y,r,a,b,c)
+{
+    if(dist(x,y,a,b)<(r+c-1)/2)
+    {
+        return true;
+    }
+    else 
+    {
+        return false;
+    }
+};
+
+mouseMoved=function(){
+    dx=mouseX;
+    dy=mouseY;
+};
+
+
+
+var drawScene1=function()
+{
+    var x=40,y=90;
+    currScene=1;
+    background(255, 0, 0);
+    textSize(40);
+    fill(18, 50, 232);
+    text("Ball-Eater", x,y-10);
+    fill(0, 230, 255);
+    rect(x,y+100,340,40);
+    fill(245, 235, 235);
+    textSize(25);
+    text("Click to undertand the Rules", 50,220);
+    fill(47, 255, 0);
+    rect(x,y+50,90,40);
+    fill(255, 166, 0);
+    text("PLAY", x+10,y+80);
+    
+    
+};
+
+var drawScenerules=function()
+{
+    currScene=2;
+    var x=30,y=50;
+    background(0, 140, 255);
+    fill(255, 145, 0);
+    textSize(30);
+    text("RULES", x,y);
+    textSize(20);
+    text("1) Eat balls smaller than you", x, y+30);
+    text("2) Avoid balls bigger than you", x, y+60);
+    text("3) The more you eat, the bigger you get", x, y+90);
+    text("4) Control with mouse", x, y+120);
+    text("5) Have Fun!", x, y+150);
+    
+    fill(255, 0, 0);
+    rect(x,y+200,80,40);
+    fill(0, 200, 255);
+    text("Back",x+10,y+225);
+    
+};
+
+var drawSceneplay=function()
+{
+    currScene=3;
+    x+=(dx-x)/10;
+    y+=(dy-y)/10;
+    
+    background(0, 217, 255);
+    
+    fill(0, 51, 255);
+    ellipse(x,y,r,r); //user
+    
+    //small balls
+    fill(224, 67, 67);
+    ellipse(x1,y1,r1,r1);
+    fill(224, 67, 67);
+    ellipse(x2,y2,r1,r1);
+    fill(224, 67, 67);
+    ellipse(x3,y3,r1,r1);
+    fill(224, 67, 67);
+    ellipse(x4,y4,r1,r1);
+    fill(224, 67, 67);
+    ellipse(x5,y5,r1,r1);
+    //big balls
+    fill(224, 67, 67);
+    ellipse(xBig1,yBig1,rbig1,rbig1);
+    
+    fill(224, 67, 67);
+    ellipse(xBig2,yBig2,rbig2,rbig2);
+    
+    fill(224, 67, 67);
+    ellipse(xBig3,yBig3,rbig3,rbig3);
+    
+    //score
+    fill(255, 221, 0);
+    textSize(20);
+    text("Score: "+n,300,40);
+    fill(255, 221, 0);
+    
+    x1+=s0;
+    x2-=s1;
+    x3+=s0;
+    x4-=s1;
+    x5+=s0;
+    y1-=s1;
+    y2+=s0;
+    y3-=s1;
+    y4-=s0;
+    y5+=s1;
+    xBig1+=s0;
+    yBig1+=s2;
+    xBig2+=s1;
+    yBig2-=s2;
+    xBig3+=s0;
+    yBig3+=s3;
+    
+    if(outside(x1,y1))
+    {
+        x1=0;
+        y1=random(0,400);
+    }
+    if(outside(x2,y2))
+    {
+        x2=random(0,400);
+        y2=0;
+    }
+    if(outside(x3,y3))
+    {
+        x3=0;
+        y3=random(0,400);
+    }
+    if(outside(x4,y4))
+    {
+        x4=random(0,400);
+        y4=random(0,400);
+    }
+    if(outside(x5,y5))
+    {
+        x5=0;
+        y5=random(0,400);
+    }
+    
+    if(outside(xBig1,yBig1))
+    {
+        xBig1=random(0,390);
+        yBig1=5;
+        rbig1=random(r-15, r+20);
+        
+    }
+    if(outside(xBig2,yBig2))
+    {
+        yBig2=random(0,400);
+        xBig2=1;
+        rbig2=random(r-15, r+20);
+    }
+    if(outside(xBig3, yBig3))
+    {
+        yBig3=0;
+        xBig3=random(0,400);
+        rbig3=random(r-15, r+20);
+    }
+    // stopping
+    if(hit(x,y,r,xBig1,yBig1,rbig1) && r<rbig1)
+    {
+       end();
+       
+       
+    }
+    
+    if(hit(x,y,r,xBig2,yBig2,rbig2) && r<rbig2)
+    {
+        end();
+        
+    }
+    
+    if(hit(x,y,r,xBig3,yBig3,rbig3) && r<rbig3)
+    {
+      end();
+      
+    }
+     // adding
+    if(hit(x,y,r,x1,y1,r1))
+    {
+        r+=rspeed;
+        x1=0;
+        y1=random(0,400);
+        n+=nspeed;
+        
+        
+    }
+    if(hit(x,y,r,x2,y2,r1))
+    {
+        r+=rspeed;
+        x2=random(0,400);
+        y2=0;
+        n+=nspeed;
+        
+    }
+    if(hit(x,y,r,x3,y3,r1))
+    {
+        r+=rspeed;
+        x3=0;
+        y3=random(0,400);
+        n+=nspeed;
+        
+    }
+    if(hit(x,y,r,x4,y4,r1))
+    {
+        r+=rspeed;
+        x4=random(0,400);
+        y4=random(0,400);
+        n+=nspeed;
+        
+    }
+    if(hit(x,y,r,x5,y5,r1))
+    {
+        r+=rspeed;
+        x5=0;
+        y5=random(0,400);
+        n+=nspeed;
+        
+    }
+    
+    //adding bonus points
+    
+    if(hit(x,y,r,xBig1,yBig1,rbig1) && r>=rbig1)
+    {
+        r+=rspeed*2;
+        xBig1=random(0,390);
+        yBig1=5;
+        rbig1=random(r-15, r+20);
+        n+=nspeed*2;
+       
+    }
+    
+    if(hit(x,y,r,xBig2,yBig2,rbig2) && r>=rbig2)
+    {
+        r+=rspeed*2;
+        n+=nspeed*2;
+        yBig2=random(0,400);
+        xBig2=1;
+        rbig2=random(r-15, r+20);
+    }
+    
+    if(hit(x,y,r,xBig3,yBig3,rbig3)&& r>=rbig3)
+    {
+        r+=rspeed*2;
+        n+=nspeed*2;
+        yBig3=1;
+        xBig3=random(0,400);
+        rbig3=random(r-15, r+20);
+        
+    }
+    
+};
+
+
+
+mouseClicked=function()
+{
+    if(currScene===1)
+    {
+        if(mouseX<380 && mouseX>40 && mouseY<230 && mouseY>190)
+        {
+            drawScenerules();
+        }
+        
+        if(mouseX<130 && mouseX>40 && mouseY<180 && mouseY>140)
+        {
+            x=200;
+            y=200;
+            n=0;
+            r=35;
+            s0=random(2,4);
+            s1=random(1,3);
+            s2=random(2,4);
+            s3=random(1,3);
+            nspeed=1;
+            rspeed=1;
+            xBig1=random(0,380);
+            yBig1=5;
+            xBig2=0;
+            yBig2=random(0,400);
+            xBig3=random(0,400);
+            yBig3=0;
+            drawSceneplay();
+        }
+    }
+    
+    if(currScene===2)
+    {
+        if(mouseX<110 && mouseX>30 && mouseY<290 && mouseY>250)
+        {
+            drawScene1();
+        }
+    }
+    
+    
+    
+    if(currScene===4)
+    {
+         if(mouseX<110 && mouseX>30 && mouseY<280 && mouseY>250)
+         {
+             
+             drawScene1();
+         }
+    }
+    
+    
+};
+
+draw= function() {
+    if(currScene===3)
+    {
+        drawSceneplay();
+    }
+
+    if (currScene===1)
+    {
+        drawScene1();
+    }
+    
+};
+
+drawScene1();
+
+
+
+
+
+
+</script>
+<canvas id="pjs"> </canvas>
+
+</html>
